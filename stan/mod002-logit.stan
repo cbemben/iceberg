@@ -9,29 +9,30 @@
 //    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
 //
 
-// The input data is a vector 'y' of length 'N'.
+// The input data is a vector 'x' of length 'N'.
 data {
   int<lower=0> N;
-  vector<lower=0>[N] y;
+  vector[N] x; // Age of passenger
+  int<lower=0,upper=1> y[N]; // survival outcome
 }
 
 // The parameters accepted by the model. Our model
-// accepts two parameters 'mu' and 'sigma'.
+// accepts two parameters 'alpha' and 'beta'.
 parameters {
-  real<lower=0> mu;
-  real<lower=0> sigma;
+  real alpha;
+  real beta;
 }
 
 // The model to be estimated. We model the output
 // 'y' to be normally distributed with mean 'mu'
 // and standard deviation 'sigma'.
 model {
-  mu ~ normal(20, 2); // prior
-  sigma ~ uniform(0,100); //prior
-  y ~ normal(mu, sigma);
+  y ~ bernoulli_logit( alpha + beta * x );
 }
 
 generated quantities {
-  int y_rep = normal_rng(mu, sigma);
+  int<lower=0,upper=1> y_rep[N];
+  for (n in 1:N)
+    y_rep[n] = bernoulli_logit_rng( alpha + beta * x[n]);
 }
 
