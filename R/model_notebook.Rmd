@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r cars}
 library(rstan)
 
-simple_model <- stan_model('stan/mod001.stan')
+simple_model <- stan_model('~/projectrepos/titanic/stan/mod001.stan')
 print(simple_model)
 ```
 
@@ -24,11 +24,68 @@ Now generate some sample data
 simple_fit <- sampling(
   simple_model,
   data = list(N=nrow(train), y=train$Age),
-  chains = 1,
-  iter = 1,
-  algorithm = 'Fixed_param',
+  #chains = 1,
+  #iter =1000,
+  #algorithm = 'NUTS',
   seed = 123
 )
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+summary(simple_fit)
+```
+
+```{r}
+library(bayesplot)
+samp <- rstan::extract(simple_fit)
+
+hist(samp$y_rep, freq=FALSE)
+```
+
+## Fit Logistic Regression
+
+Age is only explanatory variable at this time.
+
+```{r}
+age_logit_mod <- stan_model(file = '~/projectrepos/titanic/stan/mod002-logit.stan')
+
+age_logit_fit <- sampling(
+  age_logit_mod,
+  data = list( N = nrow(train), 
+               x = train$Age, 
+               y = train$Survived, 
+               N_new = nrow(test), 
+               x_new=test$Age),
+  seed = 111
+)
+```
+
+```{r}
+age_logit_ext <- extract(age_logit_fit)
+
+par(mfrow = c(3,1))
+hist(age_logit_ext$alpha, main = 'alpha param')
+hist(age_logit_ext$beta, main = 'beta param')
+hist(age_logit_ext$y_rep, main = 'simulated survival')
+```
+
+```{r}
+posterior <- as.array(age_logit_fit)
+bayesplot::mcmc_scatter(posterior, pars=c("alpha","beta"))
+```
+
+```{r}
+bayesplot::mcmc_intervals(posterior, pars=c("alpha","beta"))
+```
+
+```{r}
+#https://discourse.mc-stan.org/t/posterior-prediction-from-logit-regression/12217/2
+postDF <- as.data.frame(age_logit_ext$y_new)
+bayesplot::ppc_stat(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean)
+```
+
+The survival rate is similar to the actual data.
+
+```{r}
+prop.table(table(age_logit_ext$y_rep))
+```

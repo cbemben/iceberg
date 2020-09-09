@@ -14,6 +14,9 @@ data {
   int<lower=0> N;
   vector[N] x; // Age of passenger
   int<lower=0,upper=1> y[N]; // survival outcome
+  
+  int<lower=0> N_new;
+  vector[N_new] x_new;
 }
 
 // The parameters accepted by the model. Our model
@@ -31,8 +34,12 @@ model {
 }
 
 generated quantities {
+  vector[N_new] y_new;
   int<lower=0,upper=1> y_rep[N];
   for (n in 1:N)
     y_rep[n] = bernoulli_logit_rng( alpha + beta * x[n]);
+
+  for (n in 1:N_new)
+    y_new[n] = bernoulli_logit_rng( alpha + beta * x_new[n]);
 }
 
