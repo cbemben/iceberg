@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r cars}
 library(rstan)
+library(rstanarm)
+library(magrittr)
 
 simple_model <- stan_model('~/projectrepos/titanic/stan/mod001.stan')
 print(simple_model)
@@ -84,8 +86,28 @@ postDF <- as.data.frame(age_logit_ext$y_new)
 bayesplot::ppc_stat(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean)
 ```
 
+
+```{r}
+age_logit_hier_mod <- stan_model('~/projectrepos/titanic/stan/mod002-logit-hier.stan')
+age_logit_hier_fit <- sampling(
+              age_logit_hier_mod,
+              data = list( N = nrow(train), 
+                           Pclass = nlevels(factor(train$Pclass)),
+                           gIndex = train$Pclass,
+                           age = train$Age, 
+                           survival = train$Survived ),
+  seed = 112)
+```
+
 The survival rate is similar to the actual data.
 
 ```{r}
-prop.table(table(age_logit_ext$y_rep))
+age_logit_hier_ext <- extract(age_logit_hier_fit, pars="y_rep")
+
+age_logit_hier_fit %>% 
+posterior_predict( draws=500) %>% 
+ppc_stat_grouped(y = sum(train$Survived),
+                 group = train$Pclass,
+                 stat = "median")
+
 ```
