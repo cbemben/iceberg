@@ -11,33 +11,35 @@
 
 // The input data is a vector 'y' of length 'N'.
 data {
-  int<lower=0> N;
-  vector[N] age;
-  int<lower=0> Pclass;
-  int<lower=1> gIndex[N];
+  int<lower=0> N; // Number of obs
   int<lower=0,upper=1> survival[N];
+  vector<lower=0>[N] age; 
+  
+  int<lower=0> Pclass; // Number of groups
+  int<lower=1, upper=Pclass> pclass_idx[N];
 }
 
 // The parameters accepted by the model. Our model
 // accepts two parameters 'mu' and 'sigma'.
 parameters {
-  vector [Pclass] alpha;
-  vector [Pclass] beta;
+  real beta; //coefficient on age
+  vector[Pclass] alpha;
+  
+ // vector[Pclass] mu;        // Passenger class-specific intercepts
+  //real<lower=0> sigma_mu;  // sd of passenger class-specific intercepts
+  //real phi;               // intercept of model for mu
 }
 
 // The model to be estimated. We model the output
 // 'y' to be normally distributed with mean 'mu'
 // and standard deviation 'sigma'.
 model {
-  alpha ~ normal(0,10);
-  for ( n in 1:N ) {
-    survival[n] ~ bernoulli_logit( alpha[gIndex[n]] + beta[gIndex[n]] * age[n] );
-  }
+  survival ~ bernoulli_logit( alpha[pclass_idx] + age * beta );
 }
 
 generated quantities {
-  real y_rep[N];
+  int y_rep[N];
   for ( n in 1:N ) {
-    y_rep[n] = bernoulli_logit_rng( alpha[gIndex[n]] + beta[gIndex[n]] * age[n]);
+    y_rep[n] = bernoulli_logit_rng( alpha[pclass_idx[n]] + age[n] * beta );
   }
 }

@@ -26,9 +26,7 @@ Now generate some sample data
 simple_fit <- sampling(
   simple_model,
   data = list(N=nrow(train), y=train$Age),
-  #chains = 1,
-  #iter =1000,
-  #algorithm = 'NUTS',
+  cores = 4,
   seed = 123
 )
 ```
@@ -56,14 +54,15 @@ age_logit_fit <- sampling(
   data = list( N = nrow(train), 
                x = train$Age, 
                y = train$Survived, 
-               N_new = nrow(test), 
+               N_new = nrow(test),
+               cores = 4,
                x_new=test$Age),
   seed = 111
 )
 ```
 
 ```{r}
-age_logit_ext <- extract(age_logit_fit)
+age_logit_ext <- rstan::extract(age_logit_fit)
 
 par(mfrow = c(3,1))
 hist(age_logit_ext$alpha, main = 'alpha param')
@@ -86,28 +85,62 @@ postDF <- as.data.frame(age_logit_ext$y_new)
 bayesplot::ppc_stat(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean)
 ```
 
+```{r}
+bayesplot::ppc_stat_grouped(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean, group = train$Pclass[1:418])
+```
+The passenger class shows heterogeneitiy across passenger class. However, the model assumes the same suvivial rate across classes.
 
 ```{r}
 age_logit_hier_mod <- stan_model('~/projectrepos/titanic/stan/mod002-logit-hier.stan')
 age_logit_hier_fit <- sampling(
               age_logit_hier_mod,
-              data = list( N = nrow(train), 
-                           Pclass = nlevels(factor(train$Pclass)),
-                           gIndex = train$Pclass,
-                           age = train$Age, 
+              data = list( N = nrow(train),
+                           age = train$Age,
+                           Pclass = 3,
+                           pclass_idx = train$Pclass,
                            survival = train$Survived ),
-  seed = 112)
+              seed = 112,
+              cores = 4)
 ```
 
 The survival rate is similar to the actual data.
 
 ```{r}
-age_logit_hier_ext <- extract(age_logit_hier_fit, pars="y_rep")
+print(age_logit_hier_fit, pars = c('alpha','beta'))
+```
 
-age_logit_hier_fit %>% 
-posterior_predict( draws=500) %>% 
-ppc_stat_grouped(y = sum(train$Survived),
+```{r}
+age_logit_hier_ext <- rstan::extract(age_logit_hier_fit)
+y_rep <- as.matrix(age_logit_hier_fit, pars = "y_rep")
+
+ppc_stat_grouped(age_logit_hier_ext,
+                 y = train$Survived,
+                 yrep = y_rep[1:891,],
                  group = train$Pclass,
-                 stat = "median")
+                 stat = "mean")
 
 ```
+
+```{r}
+ppc_dens_overlay(train$Survived, y_rep[1:891,])
+```
+Predict with new data
+```{r}
+
+beta_post <- age_logit_hier_ext$beta
+
+# Function for simulating y based on new x
+gen_quant_r <- function(age, Pclass) {
+  alpha_post<- age_logit_hier_ext$alpha[,Pclass] #get intercept for class of passenger
+  lin_comb <- sample(alpha_post, size = length(age)) + age*sample(beta_post, size = length(age))
+  prob <- 1/(1 + exp(-lin_comb))
+  out <- rbinom(length(age), 1, prob)
+  return(out)
+}
+
+y_hat <- gen_quant_r(test$Age, test$Pclass)
+
+# Accuracy
+pred_df <- data.frame(PassengerId = test$PassengerId, Survived=y_hat)
+```
+

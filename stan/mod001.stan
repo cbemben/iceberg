@@ -32,6 +32,6 @@ model {
 }
 
 generated quantities {
-  int y_rep = normal_rng(mu, sigma);
+  real y_rep = normal_rng(mu, sigma);
 }
 
