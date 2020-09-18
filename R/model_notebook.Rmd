@@ -117,13 +117,11 @@ ppc_stat_grouped(age_logit_hier_ext,
                  y = train$Survived,
                  yrep = y_rep[1:891,],
                  group = train$Pclass,
-                 stat = "mean")
+                 stat = "mean",
+                 binwidth = 0.009)
 
 ```
 
-```{r}
-ppc_dens_overlay(train$Survived, y_rep[1:891,])
-```
 Predict with new data
 ```{r}
 
@@ -133,14 +131,21 @@ beta_post <- age_logit_hier_ext$beta
 gen_quant_r <- function(age, Pclass) {
   alpha_post<- age_logit_hier_ext$alpha[,Pclass] #get intercept for class of passenger
   lin_comb <- sample(alpha_post, size = length(age)) + age*sample(beta_post, size = length(age))
-  prob <- 1/(1 + exp(-lin_comb))
+  prob <- 1/(1 + exp(-lin_comb)) #inverse of logit link function
   out <- rbinom(length(age), 1, prob)
   return(out)
 }
 
+y_hat_tr <- gen_quant_r(train$Age, test$Pclass)
+mean(y_hat_tr == train$Survived)
+```
+
+generate predictions on the test data
+```{r}
 y_hat <- gen_quant_r(test$Age, test$Pclass)
 
 # Accuracy
 pred_df <- data.frame(PassengerId = test$PassengerId, Survived=y_hat)
+#write.csv(pred_df, file = "~/projectrepos/titanic/data/predict_20200918.csv", row.names = F)
 ```
 
