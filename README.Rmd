@@ -1,28 +1,51 @@
 ---
-title: "models"
+title: "The Titanic Kaggle Challenge"
 author: "Chris Bemben"
 date: "9/5/2020"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Overview
 
-```{r cars}
+Details of this Kaggle challenge can be found [here](https://www.kaggle.com/c/titanic), the challenge is to accurately predict whether a passenger survived or not. The response variable is binary (1 or 0) since a passenger cannot partially survive. This document will use the [Stan](https://mc-stan.org/) programming language and logistic regression to attack the challenge.
+
+```{r, echo=FALSE, message=FALSE}
 library(rstan)
 library(rstanarm)
 library(magrittr)
 
-simple_model <- stan_model('~/projectrepos/titanic/stan/mod001.stan')
-print(simple_model)
+train <- read.csv(file = '~/projectrepos/titanic/data/train.csv')
+test <- read.csv(file = '~/projectrepos/titanic/data/test.csv')
+
+str(train)
+```
+
+It's a common anecdote that women and children were the first passengers saved so the first model will only use age and gender as predictors. Since there is a substantial number of missing age values, nulls will be imputed, see this `Exploratory Data Analysis` vignette for the details of the imputation methodology.
+
+```{r, message=FALSE, warning=FALSE}
+table(is.na(train$Age))
+train$Age[is.na(train$Age)] <- with(train, 
+                                    ave(Age, Embarked, Pclass, 
+                                        FUN = function(x) 
+                                          median(x, na.rm = TRUE)))
+table(is.na(test$Age))
+test$Age[is.na(test$Age)] <- with(test, 
+                                    ave(Age, Embarked, Pclass, 
+                                        FUN = function(x) 
+                                          median(x, na.rm = TRUE)))
 ```
 
 Now generate some sample data
 
-```{r pressure}
+```{r, results='hide', message=FALSE}
+simple_model <- stan_model('~/projectrepos/titanic/stan/mod001.stan')
+```
+
+```{r}
 simple_fit <- sampling(
   simple_model,
   data = list(N=nrow(train), y=train$Age),
@@ -32,10 +55,10 @@ simple_fit <- sampling(
 ```
 
 ```{r}
-summary(simple_fit)
+print(simple_fit, pars=c('mu','sigma'))
 ```
 
-```{r}
+```{r, message=FALSE}
 library(bayesplot)
 samp <- rstan::extract(simple_fit)
 
@@ -46,9 +69,11 @@ hist(samp$y_rep, freq=FALSE)
 
 Age is only explanatory variable at this time.
 
-```{r}
+```{r, results="hide", message=FALSE}
 age_logit_mod <- stan_model(file = '~/projectrepos/titanic/stan/mod002-logit.stan')
+```
 
+```{r}
 age_logit_fit <- sampling(
   age_logit_mod,
   data = list( N = nrow(train), 
@@ -79,19 +104,22 @@ bayesplot::mcmc_scatter(posterior, pars=c("alpha","beta"))
 bayesplot::mcmc_intervals(posterior, pars=c("alpha","beta"))
 ```
 
-```{r}
+```{r, message=FALSE}
 #https://discourse.mc-stan.org/t/posterior-prediction-from-logit-regression/12217/2
 postDF <- as.data.frame(age_logit_ext$y_new)
 bayesplot::ppc_stat(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean)
 ```
 
-```{r}
+```{r, message=FALSE}
 bayesplot::ppc_stat_grouped(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean, group = train$Pclass[1:418])
 ```
 The passenger class shows heterogeneitiy across passenger class. However, the model assumes the same suvivial rate across classes.
 
-```{r}
+```{r, results="hide", message=FALSE}
 age_logit_hier_mod <- stan_model('~/projectrepos/titanic/stan/mod002-logit-hier.stan')
+```
+
+```{r}
 age_logit_hier_fit <- sampling(
               age_logit_hier_mod,
               data = list( N = nrow(train),
@@ -142,10 +170,28 @@ mean(y_hat_tr == train$Survived)
 
 generate predictions on the test data
 ```{r}
-y_hat <- gen_quant_r(test$Age, test$Pclass)
+#y_hat <- gen_quant_r(test$Age, test$Pclass)
 
 # Accuracy
-pred_df <- data.frame(PassengerId = test$PassengerId, Survived=y_hat)
+#pred_df <- data.frame(PassengerId = test$PassengerId, Survived=y_hat)
 #write.csv(pred_df, file = "~/projectrepos/titanic/data/predict_20200918.csv", row.names = F)
 ```
 
+
+
+## Appendix: Full Stan Programs
+
+`mod001.stan`
+```{r, engine='bash', echo=FALSE}
+cat ~/projectrepos/titanic/stan/mod001.stan
+```
+
+`mod002-logit.stan`
+```{r, engine='bash', echo=FALSE}
+cat ~/projectrepos/titanic/stan/mod002-logit.stan
+```
+
+`mod002-logit-hier.stan`
+```{r, engine='bash', echo=FALSE}
+cat ~/projectrepos/titanic/stan/mod002-logit-hier.stan
+```
