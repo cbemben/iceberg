@@ -21,7 +21,7 @@
 #'   ...
 #' }
 #' @source \url{https://www.kaggle.com/c/titanic/data}
-"titanic-train"
+"titanic_train"
 
 #' Titanic Passenger Testing Dataset
 #'
@@ -45,5 +45,5 @@
 #'   ...
 #' }
 #' @source \url{https://www.kaggle.com/c/titanic/data}
-"titanic-test"
+"titanic_test"
 

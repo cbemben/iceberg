@@ -17,26 +17,17 @@ Details of this Kaggle challenge can be found [here](https://www.kaggle.com/c/ti
 library(rstan)
 library(rstanarm)
 library(magrittr)
+library(titanic)
 
-train <- read.csv(file = '~/projectrepos/titanic/data/train.csv')
-test <- read.csv(file = '~/projectrepos/titanic/data/test.csv')
+train <- titanic::titanic_train
 
 str(train)
 ```
 
-It's a common anecdote that women and children were the first passengers saved so the first model will only use age and gender as predictors. Since there is a substantial number of missing age values, nulls will be imputed, see this `Exploratory Data Analysis` vignette for the details of the imputation methodology.
+It's a common anecdote that women and children were the first passengers saved so the first model will only use age and gender as predictors. Since there is a substantial number of missing age values, nulls will be imputed, see the `Impute Passenger Age` function for the details of the imputation methodology or the `Exploratory Data Analysis` vignette to see the before after.
 
-```{r, message=FALSE, warning=FALSE}
-table(is.na(train$Age))
-train$Age[is.na(train$Age)] <- with(train, 
-                                    ave(Age, Embarked, Pclass, 
-                                        FUN = function(x) 
-                                          median(x, na.rm = TRUE)))
-table(is.na(test$Age))
-test$Age[is.na(test$Age)] <- with(test, 
-                                    ave(Age, Embarked, Pclass, 
-                                        FUN = function(x) 
-                                          median(x, na.rm = TRUE)))
+```{r}
+train <- titanic::impute_passenger_age(train)
 ```
 
 Now generate some sample data

@@ -14,10 +14,43 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+Get the training data, see `titanic_train` for more info.
+
+```{r, message=FALSE}
 library(titanic)
 
-train <- titanic::train
+train <- titanic::titanic_train
+str(train)
+```
+
+## Passanger Analysis
+
+### Age
+
+```{r}
+hist(train$Age)
+```
+
+There are some null age values...
+
+```{r}
+table(is.na(train$Age))
+prop.table(table(is.na(train$Age)))
+```
+
+almost 20% of the observations are missing an age value.
+
+```{r}
+train$AgeGroup <- cut(train$Age, breaks = c(0,17,35,65,80), labels = c('<17','18-35','36-65','>=66'))
+
+library(ggplot2)
+ap <- ggplot(train, aes(x=Age, fill=Sex)) + geom_density(position = 'stack')
+
+ap
+```
 
 
+```{r}
+ap + facet_wrap('Embarked')
+prop.table(table(train$Sex,train$Embarked))
 ```

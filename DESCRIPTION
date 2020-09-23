@@ -31,3 +31,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Biarch: true
+SystemRequirements: GNU make
