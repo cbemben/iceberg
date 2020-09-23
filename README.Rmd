@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Overview
 
-Details of this Kaggle challenge can be found [here](https://www.kaggle.com/c/titanic), the challenge is to accurately predict whether a passenger survived or not. The response variable is binary (1 or 0) since a passenger cannot partially survive. This document will use the [Stan](https://mc-stan.org/) programming language and logistic regression to attack the challenge.
+Details of this Kaggle challenge can be found [here](https://www.kaggle.com/c/titanic), the challenge is to accurately predict whether a passenger survived the shipwreck or not. The response variable is binary (1 or 0) since a passenger cannot partially survive. This document will use the [Stan](https://mc-stan.org/) programming language and logistic regression to attack the challenge.
 
 ```{r, echo=FALSE, message=FALSE}
 library(rstan)
@@ -33,7 +33,7 @@ train <- titanic::impute_passenger_age(train)
 Now generate some sample data
 
 ```{r, results='hide', message=FALSE}
-simple_model <- stan_model('~/projectrepos/titanic/stan/mod001.stan')
+simple_model <- stan_model('~/projectrepos/titanic/inst/stan/mod001.stan')
 ```
 
 ```{r}
