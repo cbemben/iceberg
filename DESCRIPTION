@@ -1,0 +1,29 @@
+Package: titanic
+Title: Titanic Kaggle Challenge
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Chris",
+           family = "Bemben",
+           role = c("aut", "cre"),
+           email = "cbemben04@gmail.com")
+Description: Encapsulate the work used in the Titanic Kaggle Challenge.
+License: `use_mit_license()`
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 3.4.0)
+Imports: 
+    Rcpp (>= 0.12.0),
+    RcppParallel (>= 5.0.1),
+    methods,
+    rstan (>= 2.18.1),
+    rstantools (>= 2.1.1)
+LinkingTo: 
+    BH (>= 1.66.0),
+    Rcpp (>= 0.12.0),
+    RcppEigen (>= 0.3.3.3.0),
+    RcppParallel (>= 5.0.1),
+    StanHeaders (>= 2.18.0),
+    rstan (>= 2.18.1)
