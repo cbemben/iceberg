@@ -19,6 +19,7 @@ library(rstanarm)
 library(magrittr)
 library(ggplot2)
 library(titanic)
+library(bayesplot)
 
 train <- titanic::titanic_train
 
@@ -34,9 +35,9 @@ It's a common anecdote that women and children were the first passengers saved s
 train <- titanic::impute_passenger_age(train)
 ```
 
-
+The `Stan` program fits the model but also accepts a test dataset which will be used to make predictions. For more details on this approach see the `Stan` [manual](https://mc-stan.org/docs/2_24/stan-users-guide/prediction-forecasting-and-backcasting.html).
 ```{r, message=FALSE}
-simple_model <- stanmodels$age_gender_model
+simple_model <- titanic::stanmodels$age_gender_model
 print(simple_model)
 ```
 
@@ -65,7 +66,6 @@ print(simple_fit, pars=c('alpha','beta'))
 Gender has a big impact on survival.
 
 ```{r, message=FALSE}
-library(bayesplot)
 samp <- rstan::extract(simple_fit)
 
 mcmc_areas(
@@ -76,6 +76,18 @@ mcmc_areas(
   point_est = "mean"
 )
 ```
+
+```{r}
+post_pred_df <- as.data.frame(samp$y_new)
+bayesplot::ppc_stat(y = train[test_idx,"Survived"], yrep = as.matrix(post_pred_df), stat = mean)
+```
+The plot above is comparing the predictions to the actual mean of the test dataset. Overall the model does a good job of estimating the survival rate but individual predictions are still in need of review and for the Kaggle challenge we care about accuracy.
+
+```{r}
+mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
+```
+
+Accuracy against a test set is about `r mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])` percent. There seems to be more to the story we need to consider to improve accuracy to a reasonable level.
 
 ## Fit Logistic Regression
 
