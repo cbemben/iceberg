@@ -1,6 +1,6 @@
 #' The 'titanic' package.
 #'
-#' @description A DESCRIPTION OF THE PACKAGE
+#' @description Encapsulate the work used in the Titanic Kaggle Challenge.
 #'
 #' @docType package
 #' @name titanic-package
