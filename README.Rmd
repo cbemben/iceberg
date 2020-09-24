@@ -11,15 +11,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Overview
 
-Details of this Kaggle challenge can be found [here](https://www.kaggle.com/c/titanic), the challenge is to accurately predict whether a passenger survived the shipwreck or not. The response variable is binary (1 or 0) since a passenger cannot partially survive. This document will use the [Stan](https://mc-stan.org/) programming language and logistic regression to attack the challenge.
+Details of this Kaggle challenge can be found [here](https://www.kaggle.com/c/titanic), the challenge is to accurately predict whether a passenger survived the shipwreck or not. The response variable is binary and since a passenger cannot partially survive the response variable will be either 1 or 0. This document will use the [Stan](https://mc-stan.org/) programming language and logistic regression to attack the challenge.
 
-```{r, echo=FALSE, message=FALSE}
+```{r, message=FALSE}
 library(rstan)
 library(rstanarm)
 library(magrittr)
+library(ggplot2)
 library(titanic)
 
 train <- titanic::titanic_train
+
+train_idx <- sample(nrow(train), nrow(train)*0.8)
+test_idx <- setdiff(seq_len(nrow(train)), train_idx)
 
 str(train)
 ```
@@ -30,30 +34,43 @@ It's a common anecdote that women and children were the first passengers saved s
 train <- titanic::impute_passenger_age(train)
 ```
 
-Now generate some sample data
 
-```{r, results='hide', message=FALSE}
-simple_model <- stan_model('~/projectrepos/titanic/inst/stan/mod001.stan')
+```{r, message=FALSE}
+simple_model <- stanmodels$age_gender_model
+print(simple_model)
 ```
 
 ```{r}
 simple_fit <- sampling(
   simple_model,
-  data = list(N=nrow(train), y=train$Age),
-  cores = 4,
-  seed = 123
+  data = list(N=nrow(train[train_idx,]),
+              age=train[train_idx,'Age'],
+              sex=2,
+              sex_idx=as.integer(train[train_idx,'Sex']),
+              survived=train[train_idx,'Survived']),
+  seed = 1231
 )
 ```
 
+The model estimates an intercept for each `Sex` separately but shares the coefficient on age. The prior on `beta` is a standard normal distribution centered at 0 with a standard deviation of 1.
+
 ```{r}
-print(simple_fit, pars=c('mu','sigma'))
+print(simple_fit, pars=c('alpha','beta'))
 ```
+
+Gender has a big impact on survival.
 
 ```{r, message=FALSE}
 library(bayesplot)
 samp <- rstan::extract(simple_fit)
 
-hist(samp$y_rep, freq=FALSE)
+mcmc_areas(
+  simple_fit, 
+  pars = c("alpha[1]","alpha[2]"),
+  prob = 0.8, # 80% intervals
+  prob_outer = 0.99, # 99%
+  point_est = "mean"
+)
 ```
 
 ## Fit Logistic Regression
@@ -61,7 +78,7 @@ hist(samp$y_rep, freq=FALSE)
 Age is only explanatory variable at this time.
 
 ```{r, results="hide", message=FALSE}
-age_logit_mod <- stan_model(file = '~/projectrepos/titanic/stan/mod002-logit.stan')
+age_logit_mod <- stanmodels$mod002_logit
 ```
 
 ```{r}
@@ -104,10 +121,10 @@ bayesplot::ppc_stat(y = as.integer(train$Survived[1:418]), yrep = as.matrix(post
 ```{r, message=FALSE}
 bayesplot::ppc_stat_grouped(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean, group = train$Pclass[1:418])
 ```
-The passenger class shows heterogeneitiy across passenger class. However, the model assumes the same suvivial rate across classes.
+The passenger class shows heterogeneitiy across passenger class. However, the model assumes the same survival rate across classes.
 
 ```{r, results="hide", message=FALSE}
-age_logit_hier_mod <- stan_model('~/projectrepos/titanic/stan/mod002-logit-hier.stan')
+age_logit_hier_mod <- stanmodels$mod002_logit_hier
 ```
 
 ```{r}
@@ -166,23 +183,4 @@ generate predictions on the test data
 # Accuracy
 #pred_df <- data.frame(PassengerId = test$PassengerId, Survived=y_hat)
 #write.csv(pred_df, file = "~/projectrepos/titanic/data/predict_20200918.csv", row.names = F)
-```
-
-
-
-## Appendix: Full Stan Programs
-
-`mod001.stan`
-```{r, engine='bash', echo=FALSE}
-cat ~/projectrepos/titanic/stan/mod001.stan
-```
-
-`mod002-logit.stan`
-```{r, engine='bash', echo=FALSE}
-cat ~/projectrepos/titanic/stan/mod002-logit.stan
-```
-
-`mod002-logit-hier.stan`
-```{r, engine='bash', echo=FALSE}
-cat ~/projectrepos/titanic/stan/mod002-logit-hier.stan
 ```

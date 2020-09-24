@@ -18,8 +18,11 @@ Get the training data, see `titanic_train` for more info.
 
 ```{r, message=FALSE}
 library(titanic)
+library(data.table)
+library(ggplot2)
 
 train <- titanic::titanic_train
+train <- as.data.table(train)
 str(train)
 ```
 
@@ -41,14 +44,24 @@ prop.table(table(is.na(train$Age)))
 almost 20% of the observations are missing an age value.
 
 ```{r}
-train$AgeGroup <- cut(train$Age, breaks = c(0,17,35,65,80), labels = c('<17','18-35','36-65','>=66'))
+train <- titanic::impute_passenger_age(train)
+train$AgeGroup <- cut(train$Age, breaks = c(0,17,30,40,50,65,80), labels = c('<17','18-30','31-40','41-50','51-65','>=66'))
 
-library(ggplot2)
 ap <- ggplot(train, aes(x=Age, fill=Sex)) + geom_density(position = 'stack')
 
 ap
 ```
 
+```{r}
+ag_plt_df <- train[, .(Survived=sum(Survived)), by=c('AgeGroup','Sex')]
+ag_all_df <- train[, .(Survived=sum(Survived)), by=c('Age','Sex')]
+
+ggplot(ag_plt_df, aes(x=AgeGroup,y=Survived, fill=Sex)) + geom_col() +
+  coord_flip() + 
+  labs(title = 'Count of Survived Passengers by Age Group and Sex')
+
+ggplot(ag_all_df, aes(x=Age, y=Survived, colour=Sex)) + geom_point()
+```
 
 ```{r}
 ap + facet_wrap('Embarked')
