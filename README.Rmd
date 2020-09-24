@@ -47,7 +47,11 @@ simple_fit <- sampling(
               age=train[train_idx,'Age'],
               sex=2,
               sex_idx=as.integer(train[train_idx,'Sex']),
-              survived=train[train_idx,'Survived']),
+              survived=train[train_idx,'Survived'],
+              test_N=nrow(train[test_idx,]),
+              test_age=train[test_idx,'Age'],
+              test_sex_idx=as.integer(train[test_idx,'Sex'])
+              ),
   seed = 1231
 )
 ```

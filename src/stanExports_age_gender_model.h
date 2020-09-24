@@ -33,7 +33,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_age_gender_model");
-    reader.add_event(28, 26, "end", "model_age_gender_model");
+    reader.add_event(40, 38, "end", "model_age_gender_model");
     return reader;
 }
 #include <stan_meta_header.hpp>
@@ -45,6 +45,9 @@ private:
         vector_d age;
         int sex;
         std::vector<int> sex_idx;
+        int test_N;
+        vector_d test_age;
+        std::vector<int> test_sex_idx;
 public:
     model_age_gender_model(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -108,14 +111,14 @@ public:
                 age(j_1__) = vals_r__[pos__++];
             }
             check_greater_or_equal(function__, "age", age, 0);
-            current_statement_begin__ = 7;
+            current_statement_begin__ = 6;
             context__.validate_dims("data initialization", "sex", "int", context__.to_vec());
             sex = int(0);
             vals_i__ = context__.vals_i("sex");
             pos__ = 0;
             sex = vals_i__[pos__++];
             check_greater_or_equal(function__, "sex", sex, 0);
-            current_statement_begin__ = 8;
+            current_statement_begin__ = 7;
             validate_non_negative_index("sex_idx", "N", N);
             context__.validate_dims("data initialization", "sex_idx", "int", context__.to_vec(N));
             sex_idx = std::vector<int>(N, int(0));
@@ -130,15 +133,48 @@ public:
                 check_greater_or_equal(function__, "sex_idx[i_0__]", sex_idx[i_0__], 1);
                 check_less_or_equal(function__, "sex_idx[i_0__]", sex_idx[i_0__], sex);
             }
+            current_statement_begin__ = 10;
+            context__.validate_dims("data initialization", "test_N", "int", context__.to_vec());
+            test_N = int(0);
+            vals_i__ = context__.vals_i("test_N");
+            pos__ = 0;
+            test_N = vals_i__[pos__++];
+            check_greater_or_equal(function__, "test_N", test_N, 0);
+            current_statement_begin__ = 11;
+            validate_non_negative_index("test_age", "test_N", test_N);
+            context__.validate_dims("data initialization", "test_age", "vector_d", context__.to_vec(test_N));
+            test_age = Eigen::Matrix<double, Eigen::Dynamic, 1>(test_N);
+            vals_r__ = context__.vals_r("test_age");
+            pos__ = 0;
+            size_t test_age_j_1_max__ = test_N;
+            for (size_t j_1__ = 0; j_1__ < test_age_j_1_max__; ++j_1__) {
+                test_age(j_1__) = vals_r__[pos__++];
+            }
+            check_greater_or_equal(function__, "test_age", test_age, 0);
+            current_statement_begin__ = 13;
+            validate_non_negative_index("test_sex_idx", "test_N", test_N);
+            context__.validate_dims("data initialization", "test_sex_idx", "int", context__.to_vec(test_N));
+            test_sex_idx = std::vector<int>(test_N, int(0));
+            vals_i__ = context__.vals_i("test_sex_idx");
+            pos__ = 0;
+            size_t test_sex_idx_k_0_max__ = test_N;
+            for (size_t k_0__ = 0; k_0__ < test_sex_idx_k_0_max__; ++k_0__) {
+                test_sex_idx[k_0__] = vals_i__[pos__++];
+            }
+            size_t test_sex_idx_i_0_max__ = test_N;
+            for (size_t i_0__ = 0; i_0__ < test_sex_idx_i_0_max__; ++i_0__) {
+                check_greater_or_equal(function__, "test_sex_idx[i_0__]", test_sex_idx[i_0__], 1);
+                check_less_or_equal(function__, "test_sex_idx[i_0__]", test_sex_idx[i_0__], sex);
+            }
             // initialize transformed data variables
             // execute transformed data statements
             // validate transformed data
             // validate, set parameter ranges
             num_params_r__ = 0U;
             param_ranges_i__.clear();
-            current_statement_begin__ = 12;
+            current_statement_begin__ = 17;
             num_params_r__ += 1;
-            current_statement_begin__ = 13;
+            current_statement_begin__ = 18;
             validate_non_negative_index("alpha", "sex", sex);
             num_params_r__ += sex;
         } catch (const std::exception& e) {
@@ -158,7 +194,7 @@ public:
         (void) pos__; // dummy call to supress warning
         std::vector<double> vals_r__;
         std::vector<int> vals_i__;
-        current_statement_begin__ = 12;
+        current_statement_begin__ = 17;
         if (!(context__.contains_r("beta")))
             stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta missing")), current_statement_begin__, prog_reader__());
         vals_r__ = context__.vals_r("beta");
@@ -171,7 +207,7 @@ public:
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta: ") + e.what()), current_statement_begin__, prog_reader__());
         }
-        current_statement_begin__ = 13;
+        current_statement_begin__ = 18;
         if (!(context__.contains_r("alpha")))
             stan::lang::rethrow_located(std::runtime_error(std::string("Variable alpha missing")), current_statement_begin__, prog_reader__());
         vals_r__ = context__.vals_r("alpha");
@@ -213,14 +249,14 @@ public:
         try {
             stan::io::reader<local_scalar_t__> in__(params_r__, params_i__);
             // model parameters
-            current_statement_begin__ = 12;
+            current_statement_begin__ = 17;
             local_scalar_t__ beta;
             (void) beta;  // dummy to suppress unused var warning
             if (jacobian__)
                 beta = in__.scalar_constrain(lp__);
             else
                 beta = in__.scalar_constrain();
-            current_statement_begin__ = 13;
+            current_statement_begin__ = 18;
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> alpha;
             (void) alpha;  // dummy to suppress unused var warning
             if (jacobian__)
@@ -228,9 +264,9 @@ public:
             else
                 alpha = in__.vector_constrain(sex);
             // model body
-            current_statement_begin__ = 17;
+            current_statement_begin__ = 22;
             lp_accum__.add(normal_log<propto__>(beta, 0, 1));
-            current_statement_begin__ = 18;
+            current_statement_begin__ = 23;
             lp_accum__.add(bernoulli_logit_log<propto__>(survived, add(stan::model::rvalue(alpha, stan::model::cons_list(stan::model::index_multi(sex_idx), stan::model::nil_index_list()), "alpha"), multiply(age, beta))));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
@@ -254,6 +290,7 @@ public:
         names__.resize(0);
         names__.push_back("beta");
         names__.push_back("alpha");
+        names__.push_back("y_new");
         names__.push_back("y_rep");
     }
     void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
@@ -263,6 +300,9 @@ public:
         dimss__.push_back(dims__);
         dims__.resize(0);
         dims__.push_back(sex);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dims__.push_back(test_N);
         dimss__.push_back(dims__);
         dims__.resize(0);
         dims__.push_back(N);
@@ -299,21 +339,39 @@ public:
             if (!include_gqs__ && !include_tparams__) return;
             if (!include_gqs__) return;
             // declare and define generated quantities
-            current_statement_begin__ = 22;
+            current_statement_begin__ = 27;
+            validate_non_negative_index("y_new", "test_N", test_N);
+            Eigen::Matrix<double, Eigen::Dynamic, 1> y_new(test_N);
+            stan::math::initialize(y_new, DUMMY_VAR__);
+            stan::math::fill(y_new, DUMMY_VAR__);
+            current_statement_begin__ = 28;
             validate_non_negative_index("y_rep", "N", N);
             std::vector<int> y_rep(N, int(0));
             stan::math::fill(y_rep, std::numeric_limits<int>::min());
             // generated quantities statements
-            current_statement_begin__ = 23;
+            current_statement_begin__ = 30;
             for (int n = 1; n <= N; ++n) {
-                current_statement_begin__ = 24;
+                current_statement_begin__ = 31;
                 stan::model::assign(y_rep, 
                             stan::model::cons_list(stan::model::index_uni(n), stan::model::nil_index_list()), 
                             bernoulli_logit_rng((get_base1(alpha, get_base1(sex_idx, n, "sex_idx", 1), "alpha", 1) + (get_base1(age, n, "age", 1) * beta)), base_rng__), 
                             "assigning variable y_rep");
             }
+            current_statement_begin__ = 35;
+            for (int i = 1; i <= test_N; ++i) {
+                current_statement_begin__ = 36;
+                stan::model::assign(y_new, 
+                            stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
+                            bernoulli_logit_rng((get_base1(alpha, get_base1(test_sex_idx, i, "test_sex_idx", 1), "alpha", 1) + (get_base1(test_age, i, "test_age", 1) * beta)), base_rng__), 
+                            "assigning variable y_new");
+            }
             // validate, write generated quantities
-            current_statement_begin__ = 22;
+            current_statement_begin__ = 27;
+            size_t y_new_j_1_max__ = test_N;
+            for (size_t j_1__ = 0; j_1__ < y_new_j_1_max__; ++j_1__) {
+                vars__.push_back(y_new(j_1__));
+            }
+            current_statement_begin__ = 28;
             size_t y_rep_k_0_max__ = N;
             for (size_t k_0__ = 0; k_0__ < y_rep_k_0_max__; ++k_0__) {
                 vars__.push_back(y_rep[k_0__]);
@@ -361,6 +419,12 @@ public:
         if (include_tparams__) {
         }
         if (!include_gqs__) return;
+        size_t y_new_j_1_max__ = test_N;
+        for (size_t j_1__ = 0; j_1__ < y_new_j_1_max__; ++j_1__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "y_new" << '.' << j_1__ + 1;
+            param_names__.push_back(param_name_stream__.str());
+        }
         size_t y_rep_k_0_max__ = N;
         for (size_t k_0__ = 0; k_0__ < y_rep_k_0_max__; ++k_0__) {
             param_name_stream__.str(std::string());
@@ -385,6 +449,12 @@ public:
         if (include_tparams__) {
         }
         if (!include_gqs__) return;
+        size_t y_new_j_1_max__ = test_N;
+        for (size_t j_1__ = 0; j_1__ < y_new_j_1_max__; ++j_1__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "y_new" << '.' << j_1__ + 1;
+            param_names__.push_back(param_name_stream__.str());
+        }
         size_t y_rep_k_0_max__ = N;
         for (size_t k_0__ = 0; k_0__ < y_rep_k_0_max__; ++k_0__) {
             param_name_stream__.str(std::string());
