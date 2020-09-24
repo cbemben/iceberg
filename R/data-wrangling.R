@@ -8,9 +8,7 @@
 #' @export
 #'
 impute_passenger_age <- function(data){
-  data$Age[is.na(data$Age)] <- with(data,
-                                      ave(Age, Embarked, Pclass,
-                                          FUN = function(x)
-                                            median(x, na.rm = TRUE)))
+  data$Age <- ave(data$Age, data$Embarked, data$Pclass,
+                  FUN = function(x) ifelse(is.na(x), median(x, na.rm = TRUE), x))
   data
 }
