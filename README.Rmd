@@ -37,7 +37,7 @@ train <- titanic::impute_passenger_age(train)
 
 The `Stan` program fits the model but also accepts a test dataset which will be used to make predictions. For more details on this approach see the `Stan` [manual](https://mc-stan.org/docs/2_24/stan-users-guide/prediction-forecasting-and-backcasting.html).
 ```{r, message=FALSE}
-simple_model <- titanic::stanmodels$age_gender_model
+simple_model <- titanic::
 print(simple_model)
 ```
 
