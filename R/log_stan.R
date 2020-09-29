@@ -1,6 +1,5 @@
 #' Age gender Bayesian logistic regression with Stan
 #'
-#' @export
 #' @param age Numeric vector of age values.
 #' @param sex_cats integer value of total number of sexes possible (in this case it's 2).
 #' @param sex_idx integer value identifying the passenger sex.
@@ -9,6 +8,7 @@
 #' @param test_age Numeric vector of age values from test dataset.
 #' @param ... Arguments passed to `rstan::sampling` (e.g. iter, chains).
 #' @return An object of class `stanfit` returned by `rstan::sampling`
+#' @export
 #'
 age_gender_stan <- function(age, sex_cats, sex_idx, survived, test_sex_idx, test_age, ...) {
   standata <- list(N=length(survived),
