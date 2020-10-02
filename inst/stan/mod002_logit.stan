@@ -1,6 +1,7 @@
 //
 data {
   int<lower=0> N; // Number of obs
+  int<lower=1> D;
   int<lower=0,upper=1> survived[N];
   vector<lower=0>[N] age;
   int<lower=0> sex; // Number of genders
@@ -14,25 +15,36 @@ data {
 }
 
 parameters {
-  real beta;
+  real mu[D];
   vector[sex] alpha;
+  vector[D] beta[sex];
+  real<lower=1> sigma[D];
 }
 
 model {
-  beta ~ normal(0,1);
-  survived ~ bernoulli_logit( alpha[sex_idx] + age * beta );
+  mu ~ normal(0,1);
+  for ( s in 1:sex ){
+    beta[s] ~ normal(mu,sigma);
+  }
+  for( n in 1:N ){
+    survived[n] ~ bernoulli_logit( alpha[sex_idx[n]] + age[n] * beta[sex_idx[n]] );
+  }
 }
 
 generated quantities {
   vector[test_N] y_new;
   int y_rep[N];
 
+  for ( b in 1:sex ) {
+    beta[b] = normal_rng(mu,sigma);
+  }
+
   for ( n in 1:N ) {
-    y_rep[n] = bernoulli_logit_rng( alpha[sex_idx[n]] + age[n] * beta );
+    y_rep[n] = bernoulli_logit_rng( alpha[sex_idx[n]] + age[n] * beta[sex_idx[n]] );
   }
 
   //predictions using test data come from the below process
   for ( i in 1:test_N ){
-    y_new[i] = bernoulli_logit_rng( alpha[test_sex_idx[i]] + test_age[i] * beta );
+    y_new[i] = bernoulli_logit_rng( alpha[test_sex_idx[i]] + test_age[i] * beta[test_sex_idx[i]] );
   }
 }
