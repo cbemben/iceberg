@@ -1,45 +1,38 @@
 //
-// This Stan program defines a simple model, with a
-// vector of values 'y' modeled as normally distributed
-// with mean 'mu' and standard deviation 'sigma'.
-//
-// Learn more about model development with Stan at:
-//
-//    http://mc-stan.org/users/interfaces/rstan.html
-//    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
-//
-
-// The input data is a vector 'x' of length 'N'.
 data {
-  int<lower=0> N;
-  vector[N] x; // Age of passenger
-  int<lower=0,upper=1> y[N]; // survival outcome
-  
-  int<lower=0> N_new;
-  vector[N_new] x_new;
+  int<lower=0> N; // Number of obs
+  int<lower=0,upper=1> survived[N];
+  vector<lower=0>[N] age;
+  int<lower=0> sex; // Number of genders
+  int<lower=1, upper=sex> sex_idx[N];
+
+  // Ingest test data to make predictions
+  int<lower=0> test_N;
+  vector<lower=0>[test_N] test_age;
+  //reuse sex variable from above but index over test set
+  int<lower=1, upper=sex> test_sex_idx[test_N];
 }
 
-// The parameters accepted by the model. Our model
-// accepts two parameters 'alpha' and 'beta'.
 parameters {
-  real alpha;
   real beta;
+  vector[sex] alpha;
 }
 
-// The model to be estimated. We model the output
-// 'y' to be normally distributed with mean 'mu'
-// and standard deviation 'sigma'.
 model {
-  y ~ bernoulli_logit( alpha + beta * x );
+  beta ~ normal(0,1);
+  survived ~ bernoulli_logit( alpha[sex_idx] + age * beta );
 }
 
 generated quantities {
-  vector[N_new] y_new;
-  int<lower=0,upper=1> y_rep[N];
-  for (n in 1:N)
-    y_rep[n] = bernoulli_logit_rng( alpha + beta * x[n]);
+  vector[test_N] y_new;
+  int y_rep[N];
 
-  for (n in 1:N_new)
-    y_new[n] = bernoulli_logit_rng( alpha + beta * x_new[n]);
+  for ( n in 1:N ) {
+    y_rep[n] = bernoulli_logit_rng( alpha[sex_idx[n]] + age[n] * beta );
+  }
+
+  //predictions using test data come from the below process
+  for ( i in 1:test_N ){
+    y_new[i] = bernoulli_logit_rng( alpha[test_sex_idx[i]] + test_age[i] * beta );
+  }
 }
-

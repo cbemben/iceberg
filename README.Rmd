@@ -22,6 +22,7 @@ library(titanic)
 library(bayesplot)
 
 train <- titanic::titanic_train
+test <- titanic::titanic_test
 
 train_idx <- sample(nrow(train), nrow(train)*0.8)
 test_idx <- setdiff(seq_len(nrow(train)), train_idx)
@@ -33,6 +34,7 @@ It's a common anecdote that women and children were the first passengers saved s
 
 ```{r}
 train <- titanic::impute_passenger_age(train)
+test <- titanic:: impute_passenger_age(test)
 ```
 
 The `Stan` program fits the model but also accepts a test dataset which will be used to make predictions. For more details on this approach see the `Stan` [manual](https://mc-stan.org/docs/2_24/stan-users-guide/prediction-forecasting-and-backcasting.html).
@@ -46,7 +48,6 @@ simple_model <- titanic::age_gender_stan(
                                           #test_N=nrow(train[test_idx,]),
                                           test_age=train[test_idx,'Age'],
                                           test_sex_idx=as.integer(train[test_idx,'Sex']), seed=1234)
-#print(simple_model)
 ```
 
 The model estimates an intercept for each `Sex` separately but shares the coefficient on age. The prior on `beta` is a standard normal distribution centered at 0 with a standard deviation of 1.
@@ -82,7 +83,25 @@ mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
 
 Accuracy against a test set is about `r mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])` percent. There seems to be more to the story we need to consider to improve accuracy to a reasonable level.
 
-## Fit Logistic Regression
+Predit on the Kaggle chalenge test set.
+
+```{r}
+predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
+                                          sex=2,
+                                          sex_idx=as.integer(train[train_idx,'Sex']),
+                                          survived=train[train_idx,'Survived'],
+                                          test_age=test$Age,
+                                          test_sex_idx=as.integer(test$Sex)
+                                         , seed=1234
+                                         )
+```
+
+```{r}
+pred_samp <- rstan::extract(predict_model)
+test$Survived <- apply(pred_samp$y_new, 2, median)
+write.csv(test[,c("PassengerId","Survived")] ,file="inst/extdata/predict_20201002.csv")
+````
+<!-- ## Fit Logistic Regression -->
 
 <!-- Age is only explanatory variable at this time. -->
 
@@ -93,9 +112,9 @@ Accuracy against a test set is about `r mean(apply(samp$y_new, 2, median) %>% ro
 <!-- ```{r} -->
 <!-- age_logit_fit <- sampling( -->
 <!--   age_logit_mod, -->
-<!--   data = list( N = nrow(train),  -->
-<!--                x = train$Age,  -->
-<!--                y = train$Survived,  -->
+<!--   data = list( N = nrow(train), -->
+<!--                x = train$Age, -->
+<!--                y = train$Survived, -->
 <!--                N_new = nrow(test), -->
 <!--                cores = 4, -->
 <!--                x_new=test$Age), -->
