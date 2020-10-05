@@ -72,10 +72,11 @@ mcmc_areas(
 
 ```{r}
 post_pred_df <- as.data.frame(samp$y_new)
-bayesplot::ppc_stat(y = train[test_idx,"Survived"], yrep = as.matrix(post_pred_df), stat = mean)
+bayesplot::ppc_stat(y = train[test_idx,"Survived"], yrep = as.matrix(post_pred_df), stat = mean, binwidth = .01)
+bayesplot::ppc_stat_grouped(y = train[test_idx,"Survived"], yrep = as.matrix(post_pred_df), stat = mean, group = train[test_idx,"Sex"], binwidth = 0.03)
 ```
 
-The plot above is comparing the predictions to the actual mean of the test dataset. Overall the model does a good job of estimating the survival rate but individual predictions are still in need of review and for the Kaggle challenge we care about accuracy.
+The plot above is comparing the predictions to the actual mean of the test dataset. The model is close but there's still a some variation the model is missing and individual predictions are still in need of review and for the Kaggle challenge we care about accuracy.
 
 ```{r}
 mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
