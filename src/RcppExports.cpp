@@ -7,15 +7,15 @@
 using namespace Rcpp;
 
 
+RcppExport SEXP _rcpp_module_boot_stan_fit4age_gender_hier_model_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4age_gender_model_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4mod001_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4mod002_logit_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4mod002_logit_hier_mod();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rcpp_module_boot_stan_fit4age_gender_hier_model_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4age_gender_hier_model_mod, 0},
     {"_rcpp_module_boot_stan_fit4age_gender_model_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4age_gender_model_mod, 0},
     {"_rcpp_module_boot_stan_fit4mod001_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4mod001_mod, 0},
-    {"_rcpp_module_boot_stan_fit4mod002_logit_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4mod002_logit_mod, 0},
     {"_rcpp_module_boot_stan_fit4mod002_logit_hier_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4mod002_logit_hier_mod, 0},
     {NULL, NULL, 0}
 };

@@ -83,7 +83,7 @@ mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
 
 Accuracy against a test set is about `r mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])` percent. There seems to be more to the story we need to consider to improve accuracy to a reasonable level.
 
-Predit on the Kaggle chalenge test set.
+Predict on the Kaggle challenge test set.
 
 ```{r}
 predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
@@ -96,119 +96,56 @@ predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
                                          )
 ```
 
+Export the predictions and push to Kaggle.
+
 ```{r}
 pred_samp <- rstan::extract(predict_model)
 test$Survived <- apply(pred_samp$y_new, 2, median)
-write.csv(test[,c("PassengerId","Survived")] ,file="inst/extdata/predict_20201002.csv")
-````
-<!-- ## Fit Logistic Regression -->
+#write.csv(test[,c("PassengerId","Survived")] ,file="inst/extdata/predict_20201002.csv", row.names = FALSE)
+```
 
-<!-- Age is only explanatory variable at this time. -->
+## Model Iteration
 
-<!-- ```{r, results="hide", message=FALSE} -->
-<!-- age_logit_mod <- titanic::stanmodels$mod002_logit -->
-<!-- ``` -->
+The anecdote we started with was that women and children were saved first and based on the initial model above this appears to be a true statement. To build on the anecdote, passengers with a higher societal standing also were given priority over lower-class passengers. To build on the model above, I'll add passenger class as an additional input into the model and see how much improvement is achieved.
 
-<!-- ```{r} -->
-<!-- age_logit_fit <- sampling( -->
-<!--   age_logit_mod, -->
-<!--   data = list( N = nrow(train), -->
-<!--                x = train$Age, -->
-<!--                y = train$Survived, -->
-<!--                N_new = nrow(test), -->
-<!--                cores = 4, -->
-<!--                x_new=test$Age), -->
-<!--   seed = 111 -->
-<!-- ) -->
-<!-- ``` -->
+```{r}
+hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
+                                    sex=2,
+                                    sex_idx=as.integer(train[train_idx,'Sex']),
+                                    survived=train[train_idx,'Survived'],
+                                    test_age=train[test_idx,'Age'],
+                                    test_sex_idx=as.integer(train[test_idx,'Sex'])
+                                    , seed=124
+                                    )
+```
 
-<!-- ```{r} -->
-<!-- age_logit_ext <- rstan::extract(age_logit_fit) -->
+```{r}
+hier_fit <- rstan::extract(hier_mod)
+print(hier_mod, pars=c("alpha","beta"))
+```
 
-<!-- par(mfrow = c(3,1)) -->
-<!-- hist(age_logit_ext$alpha, main = 'alpha param') -->
-<!-- hist(age_logit_ext$beta, main = 'beta param') -->
-<!-- hist(age_logit_ext$y_rep, main = 'simulated survival') -->
-<!-- ``` -->
+Checking the accuracy against my test partition.
 
-<!-- ```{r} -->
-<!-- posterior <- as.array(age_logit_fit) -->
-<!-- bayesplot::mcmc_scatter(posterior, pars=c("alpha","beta")) -->
-<!-- ``` -->
+```{r}
+mean(apply(hier_fit$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
+```
+The accuracy seems to have barely improved...
 
-<!-- ```{r} -->
-<!-- bayesplot::mcmc_intervals(posterior, pars=c("alpha","beta")) -->
-<!-- ``` -->
+```{r}
+hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
+                                    sex=2,
+                                    sex_idx=as.integer(train[train_idx,'Sex']),
+                                    survived=train[train_idx,'Survived'],
+                                    test_age=test$Age,
+                                    test_sex_idx=as.integer(test$Sex)
+                                    , seed=124
+                                    )
+```
 
-<!-- ```{r, message=FALSE} -->
-<!-- #https://discourse.mc-stan.org/t/posterior-prediction-from-logit-regression/12217/2 -->
-<!-- postDF <- as.data.frame(age_logit_ext$y_new) -->
-<!-- bayesplot::ppc_stat(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean) -->
-<!-- ``` -->
+Export the predictions and push to Kaggle.
 
-<!-- ```{r, message=FALSE} -->
-<!-- bayesplot::ppc_stat_grouped(y = as.integer(train$Survived[1:418]), yrep = as.matrix(postDF), stat = mean, group = train$Pclass[1:418]) -->
-<!-- ``` -->
-<!-- The passenger class shows heterogeneitiy across passenger class. However, the model assumes the same survival rate across classes. -->
-
-<!-- ```{r, results="hide", message=FALSE} -->
-<!-- age_logit_hier_mod <- stanmodels$mod002_logit_hier -->
-<!-- ``` -->
-
-<!-- ```{r} -->
-<!-- age_logit_hier_fit <- sampling( -->
-<!--               age_logit_hier_mod, -->
-<!--               data = list( N = nrow(train), -->
-<!--                            age = train$Age, -->
-<!--                            Pclass = 3, -->
-<!--                            pclass_idx = train$Pclass, -->
-<!--                            survival = train$Survived ), -->
-<!--               seed = 112, -->
-<!--               cores = 4) -->
-<!-- ``` -->
-
-<!-- The survival rate is similar to the actual data. -->
-
-<!-- ```{r} -->
-<!-- print(age_logit_hier_fit, pars = c('alpha','beta')) -->
-<!-- ``` -->
-
-<!-- ```{r} -->
-<!-- age_logit_hier_ext <- rstan::extract(age_logit_hier_fit) -->
-<!-- y_rep <- as.matrix(age_logit_hier_fit, pars = "y_rep") -->
-
-<!-- ppc_stat_grouped(age_logit_hier_ext, -->
-<!--                  y = train$Survived, -->
-<!--                  yrep = y_rep[1:891,], -->
-<!--                  group = train$Pclass, -->
-<!--                  stat = "mean", -->
-<!--                  binwidth = 0.009) -->
-
-<!-- ``` -->
-
-<!-- Predict with new data -->
-<!-- ```{r} -->
-
-<!-- beta_post <- age_logit_hier_ext$beta -->
-
-<!-- # Function for simulating y based on new x -->
-<!-- gen_quant_r <- function(age, Pclass) { -->
-<!--   alpha_post<- age_logit_hier_ext$alpha[,Pclass] #get intercept for class of passenger -->
-<!--   lin_comb <- sample(alpha_post, size = length(age)) + age*sample(beta_post, size = length(age)) -->
-<!--   prob <- 1/(1 + exp(-lin_comb)) #inverse of logit link function -->
-<!--   out <- rbinom(length(age), 1, prob) -->
-<!--   return(out) -->
-<!-- } -->
-
-<!-- y_hat_tr <- gen_quant_r(train$Age, test$Pclass) -->
-<!-- mean(y_hat_tr == train$Survived) -->
-<!-- ``` -->
-
-<!-- generate predictions on the test data -->
-<!-- ```{r} -->
-<!-- #y_hat <- gen_quant_r(test$Age, test$Pclass) -->
-
-<!-- # Accuracy -->
-<!-- #pred_df <- data.frame(PassengerId = test$PassengerId, Survived=y_hat) -->
-<!-- #write.csv(pred_df, file = "~/projectrepos/titanic/data/predict_20200918.csv", row.names = F) -->
-<!-- ``` -->
+```{r}
+hier_pred <- rstan::extract(hier_predict)
+test$Survived <- apply(hier_pred$y_new, 2, median)
+#write.csv(test[,c("PassengerId","Survived")] ,file="inst/extdata/predict_20201005.csv", row.names = FALSE)
+```
