@@ -109,7 +109,7 @@ test$Survived <- apply(pred_samp$y_new, 2, median)
 #write.csv(test[,c("PassengerId","Survived")] ,file="inst/extdata/predict_20201002.csv", row.names = FALSE)
 ```
 
-## Model Iteration
+### Model Iteration
 
 The anecdote we started with was that women and children were saved first and based on the initial model above this appears to be a true statement. To build on the anecdote, passengers with a higher societal standing also were given priority over lower-class passengers. To build on the model above, I'll add passenger class as an additional input into the model and see how much improvement is achieved.
 
