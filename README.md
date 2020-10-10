@@ -13,4 +13,4 @@ response variable will be either 1 or 0. This document will use the
 [Stan](https://mc-stan.org/) programming language and logistic
 regression to attack the challenge.
 
-See the analysis [here](https://cbemben.github.io)
+See the analysis [here](https://cbemben.github.io/titanic/articles/Modeling%20Titanic%20Survival.html)
