@@ -18,7 +18,7 @@ A data frame with 891 rows and 12 variables:
 \item{Ticket}{}
 \item{Fare}{}
 \item{Cabin}{}
-\item{Embarked}
+\item{Embarked}{}
 ...
 }
 }

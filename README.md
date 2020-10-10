@@ -76,8 +76,8 @@ simple_model <- titanic::age_gender_stan(
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 1).
     ## Chain 1: 
-    ## Chain 1: Gradient evaluation took 8.4e-05 seconds
-    ## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
+    ## Chain 1: Gradient evaluation took 9.4e-05 seconds
+    ## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.94 seconds.
     ## Chain 1: Adjust your expectations accordingly!
     ## Chain 1: 
     ## Chain 1: 
@@ -94,15 +94,15 @@ simple_model <- titanic::age_gender_stan(
     ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 1: 
-    ## Chain 1:  Elapsed Time: 1.36134 seconds (Warm-up)
-    ## Chain 1:                0.564277 seconds (Sampling)
-    ## Chain 1:                1.92562 seconds (Total)
+    ## Chain 1:  Elapsed Time: 1.29221 seconds (Warm-up)
+    ## Chain 1:                0.653079 seconds (Sampling)
+    ## Chain 1:                1.94529 seconds (Total)
     ## Chain 1: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 2).
     ## Chain 2: 
-    ## Chain 2: Gradient evaluation took 5.2e-05 seconds
-    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
+    ## Chain 2: Gradient evaluation took 5.8e-05 seconds
+    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.58 seconds.
     ## Chain 2: Adjust your expectations accordingly!
     ## Chain 2: 
     ## Chain 2: 
@@ -119,15 +119,15 @@ simple_model <- titanic::age_gender_stan(
     ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 2: 
-    ## Chain 2:  Elapsed Time: 1.33221 seconds (Warm-up)
-    ## Chain 2:                0.595502 seconds (Sampling)
-    ## Chain 2:                1.92771 seconds (Total)
+    ## Chain 2:  Elapsed Time: 1.51446 seconds (Warm-up)
+    ## Chain 2:                0.541103 seconds (Sampling)
+    ## Chain 2:                2.05557 seconds (Total)
     ## Chain 2: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 3).
     ## Chain 3: 
-    ## Chain 3: Gradient evaluation took 5.3e-05 seconds
-    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.53 seconds.
+    ## Chain 3: Gradient evaluation took 5.2e-05 seconds
+    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
     ## Chain 3: Adjust your expectations accordingly!
     ## Chain 3: 
     ## Chain 3: 
@@ -144,15 +144,15 @@ simple_model <- titanic::age_gender_stan(
     ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 3: 
-    ## Chain 3:  Elapsed Time: 1.03686 seconds (Warm-up)
-    ## Chain 3:                0.532769 seconds (Sampling)
-    ## Chain 3:                1.56963 seconds (Total)
+    ## Chain 3:  Elapsed Time: 1.20392 seconds (Warm-up)
+    ## Chain 3:                0.551656 seconds (Sampling)
+    ## Chain 3:                1.75558 seconds (Total)
     ## Chain 3: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 4).
     ## Chain 4: 
-    ## Chain 4: Gradient evaluation took 6.3e-05 seconds
-    ## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.63 seconds.
+    ## Chain 4: Gradient evaluation took 6.2e-05 seconds
+    ## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.62 seconds.
     ## Chain 4: Adjust your expectations accordingly!
     ## Chain 4: 
     ## Chain 4: 
@@ -169,9 +169,9 @@ simple_model <- titanic::age_gender_stan(
     ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 4: 
-    ## Chain 4:  Elapsed Time: 1.51532 seconds (Warm-up)
-    ## Chain 4:                0.555943 seconds (Sampling)
-    ## Chain 4:                2.07126 seconds (Total)
+    ## Chain 4:  Elapsed Time: 1.21723 seconds (Warm-up)
+    ## Chain 4:                0.591349 seconds (Sampling)
+    ## Chain 4:                1.80858 seconds (Total)
     ## Chain 4:
 
 The model estimates an intercept for each `Sex` separately but shares
@@ -187,11 +187,11 @@ print(simple_model, pars=c('alpha','beta'))
     ## post-warmup draws per chain=1000, total post-warmup draws=4000.
     ## 
     ##           mean se_mean   sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
-    ## alpha[1]  1.12    0.01 0.25  0.65  0.96  1.12  1.29  1.62   942    1
-    ## alpha[2] -1.70    0.01 0.25 -2.21 -1.87 -1.69 -1.53 -1.20   979    1
-    ## beta      0.00    0.00 0.01 -0.01  0.00  0.00  0.01  0.02   948    1
+    ## alpha[1]  1.16    0.01 0.23  0.72  1.00  1.16  1.32  1.61   961    1
+    ## alpha[2] -1.33    0.01 0.23 -1.80 -1.48 -1.33 -1.17 -0.89   940    1
+    ## beta     -0.01    0.00 0.01 -0.02 -0.01 -0.01  0.00  0.01   906    1
     ## 
-    ## Samples were drawn using NUTS(diag_e) at Mon Oct  5 18:17:38 2020.
+    ## Samples were drawn using NUTS(diag_e) at Sat Oct 10 12:28:42 2020.
     ## For each parameter, n_eff is a crude measure of effective sample size,
     ## and Rhat is the potential scale reduction factor on split chains (at 
     ## convergence, Rhat=1).
@@ -234,9 +234,9 @@ and for the Kaggle challenge we care about accuracy.
 mean(apply(samp$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
 ```
 
-    ## [1] 0.6927374
+    ## [1] 0.7932961
 
-Accuracy against a test set is about 0.6927374 percent. There seems to
+Accuracy against a test set is about 0.7932961 percent. There seems to
 be more to the story we need to consider to improve accuracy to a
 reasonable level.
 
@@ -274,15 +274,15 @@ predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
     ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 1: 
-    ## Chain 1:  Elapsed Time: 1.26501 seconds (Warm-up)
-    ## Chain 1:                0.580057 seconds (Sampling)
-    ## Chain 1:                1.84507 seconds (Total)
+    ## Chain 1:  Elapsed Time: 1.34865 seconds (Warm-up)
+    ## Chain 1:                0.664375 seconds (Sampling)
+    ## Chain 1:                2.01302 seconds (Total)
     ## Chain 1: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 2).
     ## Chain 2: 
-    ## Chain 2: Gradient evaluation took 5.2e-05 seconds
-    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
+    ## Chain 2: Gradient evaluation took 5.3e-05 seconds
+    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.53 seconds.
     ## Chain 2: Adjust your expectations accordingly!
     ## Chain 2: 
     ## Chain 2: 
@@ -299,15 +299,15 @@ predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
     ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 2: 
-    ## Chain 2:  Elapsed Time: 1.2227 seconds (Warm-up)
-    ## Chain 2:                0.541836 seconds (Sampling)
-    ## Chain 2:                1.76454 seconds (Total)
+    ## Chain 2:  Elapsed Time: 1.32264 seconds (Warm-up)
+    ## Chain 2:                0.585447 seconds (Sampling)
+    ## Chain 2:                1.90809 seconds (Total)
     ## Chain 2: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 3).
     ## Chain 3: 
-    ## Chain 3: Gradient evaluation took 5.5e-05 seconds
-    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.55 seconds.
+    ## Chain 3: Gradient evaluation took 5.3e-05 seconds
+    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.53 seconds.
     ## Chain 3: Adjust your expectations accordingly!
     ## Chain 3: 
     ## Chain 3: 
@@ -324,15 +324,15 @@ predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
     ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 3: 
-    ## Chain 3:  Elapsed Time: 1.24263 seconds (Warm-up)
-    ## Chain 3:                0.626871 seconds (Sampling)
-    ## Chain 3:                1.8695 seconds (Total)
+    ## Chain 3:  Elapsed Time: 1.3435 seconds (Warm-up)
+    ## Chain 3:                0.647132 seconds (Sampling)
+    ## Chain 3:                1.99063 seconds (Total)
     ## Chain 3: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_model' NOW (CHAIN 4).
     ## Chain 4: 
-    ## Chain 4: Gradient evaluation took 6.2e-05 seconds
-    ## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.62 seconds.
+    ## Chain 4: Gradient evaluation took 6.1e-05 seconds
+    ## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
     ## Chain 4: Adjust your expectations accordingly!
     ## Chain 4: 
     ## Chain 4: 
@@ -349,9 +349,9 @@ predict_model <- titanic::age_gender_stan(age=train[train_idx,'Age'],
     ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 4: 
-    ## Chain 4:  Elapsed Time: 1.35837 seconds (Warm-up)
-    ## Chain 4:                0.551339 seconds (Sampling)
-    ## Chain 4:                1.90971 seconds (Total)
+    ## Chain 4:  Elapsed Time: 1.31074 seconds (Warm-up)
+    ## Chain 4:                0.612178 seconds (Sampling)
+    ## Chain 4:                1.92292 seconds (Total)
     ## Chain 4:
 
 Export the predictions and push to Kaggle.
@@ -385,8 +385,8 @@ hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 1).
     ## Chain 1: 
-    ## Chain 1: Gradient evaluation took 8.7e-05 seconds
-    ## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.
+    ## Chain 1: Gradient evaluation took 8.3e-05 seconds
+    ## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.83 seconds.
     ## Chain 1: Adjust your expectations accordingly!
     ## Chain 1: 
     ## Chain 1: 
@@ -403,15 +403,15 @@ hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 1: 
-    ## Chain 1:  Elapsed Time: 4.08011 seconds (Warm-up)
-    ## Chain 1:                1.29445 seconds (Sampling)
-    ## Chain 1:                5.37456 seconds (Total)
+    ## Chain 1:  Elapsed Time: 4.82443 seconds (Warm-up)
+    ## Chain 1:                1.26699 seconds (Sampling)
+    ## Chain 1:                6.09142 seconds (Total)
     ## Chain 1: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 2).
     ## Chain 2: 
-    ## Chain 2: Gradient evaluation took 8e-05 seconds
-    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.8 seconds.
+    ## Chain 2: Gradient evaluation took 8.2e-05 seconds
+    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.82 seconds.
     ## Chain 2: Adjust your expectations accordingly!
     ## Chain 2: 
     ## Chain 2: 
@@ -428,15 +428,15 @@ hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 2: 
-    ## Chain 2:  Elapsed Time: 4.81604 seconds (Warm-up)
-    ## Chain 2:                1.45199 seconds (Sampling)
-    ## Chain 2:                6.26803 seconds (Total)
+    ## Chain 2:  Elapsed Time: 4.47776 seconds (Warm-up)
+    ## Chain 2:                1.21826 seconds (Sampling)
+    ## Chain 2:                5.69603 seconds (Total)
     ## Chain 2: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 3).
     ## Chain 3: 
-    ## Chain 3: Gradient evaluation took 7.4e-05 seconds
-    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.74 seconds.
+    ## Chain 3: Gradient evaluation took 7.5e-05 seconds
+    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.75 seconds.
     ## Chain 3: Adjust your expectations accordingly!
     ## Chain 3: 
     ## Chain 3: 
@@ -453,9 +453,9 @@ hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 3: 
-    ## Chain 3:  Elapsed Time: 4.02299 seconds (Warm-up)
-    ## Chain 3:                1.41136 seconds (Sampling)
-    ## Chain 3:                5.43436 seconds (Total)
+    ## Chain 3:  Elapsed Time: 4.14289 seconds (Warm-up)
+    ## Chain 3:                1.33875 seconds (Sampling)
+    ## Chain 3:                5.48163 seconds (Total)
     ## Chain 3: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 4).
@@ -478,12 +478,12 @@ hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 4: 
-    ## Chain 4:  Elapsed Time: 4.75842 seconds (Warm-up)
-    ## Chain 4:                1.35479 seconds (Sampling)
-    ## Chain 4:                6.11321 seconds (Total)
+    ## Chain 4:  Elapsed Time: 4.51489 seconds (Warm-up)
+    ## Chain 4:                1.34772 seconds (Sampling)
+    ## Chain 4:                5.86261 seconds (Total)
     ## Chain 4:
 
-    ## Warning: There were 2 divergent transitions after warmup. See
+    ## Warning: There were 4 divergent transitions after warmup. See
     ## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
     ## to find out why this is a problem and how to eliminate them.
 
@@ -499,12 +499,12 @@ print(hier_mod, pars=c("alpha","beta"))
     ## post-warmup draws per chain=1000, total post-warmup draws=4000.
     ## 
     ##           mean se_mean   sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
-    ## alpha[1]  0.37    0.01 0.35 -0.32  0.14  0.37  0.61  1.08  2078    1
-    ## alpha[2] -1.18    0.01 0.30 -1.77 -1.38 -1.19 -0.98 -0.56  2150    1
-    ## beta[1]   0.03    0.00 0.01  0.01  0.02  0.03  0.04  0.06  1898    1
-    ## beta[2]  -0.02    0.00 0.01 -0.04 -0.02 -0.02 -0.01  0.00  2104    1
+    ## alpha[1]  0.47    0.01 0.32 -0.17  0.25  0.47  0.69  1.10  1982    1
+    ## alpha[2] -0.80    0.01 0.29 -1.37 -1.00 -0.80 -0.60 -0.22  1878    1
+    ## beta[1]   0.02    0.00 0.01  0.00  0.01  0.02  0.03  0.04  2135    1
+    ## beta[2]  -0.02    0.00 0.01 -0.04 -0.03 -0.02 -0.02 -0.01  1895    1
     ## 
-    ## Samples were drawn using NUTS(diag_e) at Mon Oct  5 18:18:26 2020.
+    ## Samples were drawn using NUTS(diag_e) at Sat Oct 10 12:29:30 2020.
     ## For each parameter, n_eff is a crude measure of effective sample size,
     ## and Rhat is the potential scale reduction factor on split chains (at 
     ## convergence, Rhat=1).
@@ -515,7 +515,7 @@ Checking the accuracy against my test partition.
 mean(apply(hier_fit$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
 ```
 
-    ## [1] 0.6927374
+    ## [1] 0.7932961
 
 The accuracy seems to have barely improved…
 
@@ -533,8 +533,8 @@ hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 1).
     ## Chain 1: 
-    ## Chain 1: Gradient evaluation took 8.7e-05 seconds
-    ## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.
+    ## Chain 1: Gradient evaluation took 8.9e-05 seconds
+    ## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.89 seconds.
     ## Chain 1: Adjust your expectations accordingly!
     ## Chain 1: 
     ## Chain 1: 
@@ -551,15 +551,15 @@ hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 1: 
-    ## Chain 1:  Elapsed Time: 4.30518 seconds (Warm-up)
-    ## Chain 1:                1.31293 seconds (Sampling)
-    ## Chain 1:                5.6181 seconds (Total)
+    ## Chain 1:  Elapsed Time: 4.66542 seconds (Warm-up)
+    ## Chain 1:                1.45296 seconds (Sampling)
+    ## Chain 1:                6.11838 seconds (Total)
     ## Chain 1: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 2).
     ## Chain 2: 
-    ## Chain 2: Gradient evaluation took 7.9e-05 seconds
-    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.79 seconds.
+    ## Chain 2: Gradient evaluation took 8.1e-05 seconds
+    ## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.81 seconds.
     ## Chain 2: Adjust your expectations accordingly!
     ## Chain 2: 
     ## Chain 2: 
@@ -576,15 +576,15 @@ hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 2: 
-    ## Chain 2:  Elapsed Time: 4.6623 seconds (Warm-up)
-    ## Chain 2:                1.4709 seconds (Sampling)
-    ## Chain 2:                6.1332 seconds (Total)
+    ## Chain 2:  Elapsed Time: 4.94703 seconds (Warm-up)
+    ## Chain 2:                1.48939 seconds (Sampling)
+    ## Chain 2:                6.43642 seconds (Total)
     ## Chain 2: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 3).
     ## Chain 3: 
-    ## Chain 3: Gradient evaluation took 7.3e-05 seconds
-    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.73 seconds.
+    ## Chain 3: Gradient evaluation took 7.5e-05 seconds
+    ## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.75 seconds.
     ## Chain 3: Adjust your expectations accordingly!
     ## Chain 3: 
     ## Chain 3: 
@@ -601,15 +601,15 @@ hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 3: 
-    ## Chain 3:  Elapsed Time: 4.61954 seconds (Warm-up)
-    ## Chain 3:                1.3225 seconds (Sampling)
-    ## Chain 3:                5.94203 seconds (Total)
+    ## Chain 3:  Elapsed Time: 5.15218 seconds (Warm-up)
+    ## Chain 3:                1.46405 seconds (Sampling)
+    ## Chain 3:                6.61623 seconds (Total)
     ## Chain 3: 
     ## 
     ## SAMPLING FOR MODEL 'age_gender_hier_model' NOW (CHAIN 4).
     ## Chain 4: 
-    ## Chain 4: Gradient evaluation took 7.5e-05 seconds
-    ## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.75 seconds.
+    ## Chain 4: Gradient evaluation took 7.8e-05 seconds
+    ## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.78 seconds.
     ## Chain 4: Adjust your expectations accordingly!
     ## Chain 4: 
     ## Chain 4: 
@@ -626,9 +626,9 @@ hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
     ## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
     ## Chain 4: 
-    ## Chain 4:  Elapsed Time: 4.47487 seconds (Warm-up)
-    ## Chain 4:                1.51 seconds (Sampling)
-    ## Chain 4:                5.98487 seconds (Total)
+    ## Chain 4:  Elapsed Time: 3.8485 seconds (Warm-up)
+    ## Chain 4:                1.6434 seconds (Sampling)
+    ## Chain 4:                5.4919 seconds (Total)
     ## Chain 4:
 
 Export the predictions and push to Kaggle.

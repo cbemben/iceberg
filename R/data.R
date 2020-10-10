@@ -17,7 +17,7 @@
 #'   \item{Ticket}{}
 #'   \item{Fare}{}
 #'   \item{Cabin}{}
-#'   \item{Embarked}
+#'   \item{Embarked}{}
 #'   ...
 #' }
 #' @source \url{https://www.kaggle.com/c/titanic/data}
@@ -41,9 +41,8 @@
 #'   \item{Ticket}{}
 #'   \item{Fare}{}
 #'   \item{Cabin}{}
-#'   \item{Embarked}
+#'   \item{Embarked}{}
 #'   ...
 #' }
 #' @source \url{https://www.kaggle.com/c/titanic/data}
 "titanic_test"
-
