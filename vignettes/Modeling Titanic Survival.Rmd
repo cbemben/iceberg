@@ -167,6 +167,12 @@ The first model is the age and gender model that creates separate intercepts for
 cat ~/projectrepos/titanic/inst/stan/age_gender_model.stan
 ```
 
+The second model incorporates the passenger class status, extending the model from above.
+
+```{r engine='bash', comment='', echo=FALSE}
+cat ~/projectrepos/titanic/inst/stan/age_gender_class_model.stan
+```
+
 ## References
 
 * Stan Development Team. 2018. RStan: the R interface to Stan. R package version 2.17.3.   http://mc-stan.org
