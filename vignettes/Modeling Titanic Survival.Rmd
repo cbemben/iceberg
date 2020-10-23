@@ -114,7 +114,7 @@ test$Survived <- apply(pred_samp$y_new, 2, median)
 The anecdote we started with was that women and children were saved first and based on the initial model above this appears to be a true statement. To build on the anecdote, passengers with a higher societal standing also were given priority over lower-class passengers. To build on the model above, I'll add passenger class as an additional input into the model and see how much improvement is achieved.
 
 ```{r}
-hier_mod <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
+class_mod <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
                                     pclass=train[train_idx,'Pclass'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
@@ -127,19 +127,33 @@ hier_mod <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
 ```
 
 ```{r}
-hier_fit <- rstan::extract(hier_mod)
-print(hier_mod, pars=c("alpha","beta"))
+class_fit <- rstan::extract(class_mod)
+print(class_mod, pars=c("alpha","beta","beta_class"))
 ```
 
 Checking the accuracy against my test partition.
 
 ```{r}
-mean(apply(hier_fit$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
+mean(apply(class_fit$y_new, 2, median) %>% round(0) == train[test_idx,'Survived'])
 ```
+
 The accuracy seems to have barely improved...
 
+```{r, message=FALSE}
+bayesplot::mcmc_intervals(class_mod, pars=c("alpha[1]","alpha[2]"), prob=0.8) +
+  ggplot2::labs(title = 'MCMC Intervals on Gender Based Intercepts') +
+  ggplot2::scale_y_discrete(labels = c("alpha[1]"="Male", "alpha[2]"="Female"))
+
+bayesplot::mcmc_intervals(class_mod, pars=c("beta","beta_class"), prob=0.8) +
+  ggplot2::labs(title = 'Coefficients on Age and Passenger Class')
+```
+
 ```{r}
-hier_predict <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
+bayesplot::ppc_stat_grouped(y = train[test_idx,"Survived"], yrep = class_fit$y_new, stat = mean, group = train[test_idx,"Sex"], binwidth = 0.03)
+```
+
+```{r}
+class_predict <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
                                     pclass=train[train_idx,'Pclass'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
@@ -154,9 +168,9 @@ hier_predict <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
 Export the predictions and push to Kaggle.
 
 ```{r}
-hier_pred <- rstan::extract(hier_predict)
-test$Survived <- apply(hier_pred$y_new, 2, median)
-#write.csv(test[,c("PassengerId","Survived")] ,file="inst/extdata/predict_20201005.csv", row.names = FALSE)
+class_pred <- rstan::extract(class_predict)
+test$Survived <- apply(class_pred$y_new, 2, median)
+#write.csv(test[,c("PassengerId","Survived")] ,file="~/projectrepos/titanic/inst/extdata/predict_age_class.csv", row.names = FALSE)
 ```
 
 ## Stan Models
