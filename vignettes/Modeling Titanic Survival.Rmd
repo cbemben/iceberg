@@ -114,7 +114,7 @@ test$Survived <- apply(pred_samp$y_new, 2, median)
 The anecdote we started with was that women and children were saved first and based on the initial model above this appears to be a true statement. To build on the anecdote, passengers with a higher societal standing also were given priority over lower-class passengers. To build on the model above, I'll add passenger class as an additional input into the model and see how much improvement is achieved.
 
 ```{r}
-hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
+hier_mod <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
                                     pclass=train[train_idx,'Pclass'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
@@ -139,7 +139,7 @@ mean(apply(hier_fit$y_new, 2, median) %>% round(0) == train[test_idx,'Survived']
 The accuracy seems to have barely improved...
 
 ```{r}
-hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
+hier_predict <- titanic::age_gender_class_stan(age=train[train_idx,'Age'],
                                     pclass=train[train_idx,'Pclass'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
