@@ -115,10 +115,12 @@ The anecdote we started with was that women and children were saved first and ba
 
 ```{r}
 hier_mod <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
+                                    pclass=train[train_idx,'Pclass'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
                                     survived=train[train_idx,'Survived'],
                                     test_age=train[test_idx,'Age'],
+                                    test_pclass=train[test_idx,'Pclass'],
                                     test_sex_idx=as.integer(train[test_idx,'Sex'])
                                     , seed=124
                                     )
@@ -138,10 +140,12 @@ The accuracy seems to have barely improved...
 
 ```{r}
 hier_predict <- titanic::age_gender_hier_stan(age=train[train_idx,'Age'],
+                                    pclass=train[train_idx,'Pclass'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
                                     survived=train[train_idx,'Survived'],
                                     test_age=test$Age,
+                                    test_pclass=test$Pclass,
                                     test_sex_idx=as.integer(test$Sex)
                                     , seed=124
                                     )

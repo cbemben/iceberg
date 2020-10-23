@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "cbemben04@gmail.com")
 Description: Encapsulate the work used in the Titanic Kaggle Challenge.
-License: `use_mit_license()`
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
