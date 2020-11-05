@@ -31,7 +31,8 @@ str(train)
 ### Age
 
 ```{r}
-hist(train$Age)
+ggplot(train, aes(Age, fill=Sex)) + geom_density(position='stack',alpha=0.5) +
+  ggtitle('Density by Age and Sex')
 ```
 
 There are some null age values...
@@ -47,7 +48,7 @@ almost 20% of the observations are missing an age value.
 train <- titanic::impute_passenger_age(train)
 train$AgeGroup <- cut(train$Age, breaks = c(0,17,30,40,50,65,80), labels = c('<17','18-30','31-40','41-50','51-65','>=66'))
 
-ap <- ggplot(train, aes(x=Age, fill=Sex)) + geom_density(position = 'stack')
+ap <- ggplot(train, aes(x=Age, fill=Sex)) + geom_density(position = 'stack', alpha=0.5)
 
 ap
 ```
@@ -64,6 +65,7 @@ ggplot(ag_all_df, aes(x=Age, y=Survived, colour=Sex)) + geom_point()
 ```
 
 ```{r}
-ap + facet_wrap('Embarked')
+ap + facet_wrap('Embarked') +
+  
 prop.table(table(train$Sex,train$Embarked))
 ```
