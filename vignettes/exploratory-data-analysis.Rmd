@@ -26,13 +26,48 @@ train <- as.data.table(train)
 str(train)
 ```
 
-## Passanger Analysis
-
-### Age
 
 ```{r}
-ggplot(train, aes(Age, fill=Sex)) + geom_density(position='stack',alpha=0.5) +
-  ggtitle('Density by Age and Sex')
+#for plots
+train$PassengerStatus <- as.factor(ifelse(train$Survived == 1, 'Survived','Died'))
+```
+## Passanger Analysis
+
+### Who Survived?
+
+The story goes, that women and children were saved first.
+
+```{r}
+ggplot(train, aes(x=Sex, y=Age, fill=PassengerStatus)) + geom_bar(position = 'fill', stat='identity') +
+    labs(title = "Proportion of Survival by Gender and Age") +
+    scale_fill_brewer(palette="Dark2")
+```
+
+It does appear that a lot more women and younger males were saved.
+
+```{r}
+ggplot(train, aes(x=Sex, y=Age, fill=PassengerStatus)) + geom_bar(position = 'fill', stat='identity') +
+    facet_wrap(.~Pclass) +
+    labs(title = "Proportion of Survival by Gender and Age",
+         subtitle = "Faceted by Passenger Class") +
+    scale_fill_brewer(palette="Dark2")
+```
+Dang, you don't want to be in 3rd class, survival rate for male and female is less than 50%.
+
+```{r}
+ggplot(train, aes(x=Sex, y=Age, fill=PassengerStatus)) + geom_bar(position = 'fill', stat='identity') +
+    facet_wrap(.~Parch) +
+    labs(title = "Proportion of Survival by Gender and Age",
+         subtitle = "Faceted by Passenger Parch") +
+    scale_fill_brewer(palette="Dark2")
+```
+
+```{r}
+ggplot(train, aes(x=Sex, y=Age, fill=PassengerStatus)) + geom_bar(position = 'fill', stat='identity') +
+    facet_wrap(.~Embarked) +
+    labs(title = "Proportion of Survival by Gender and Age",
+         subtitle = "Faceted by Passenger Embarked") +
+    scale_fill_brewer(palette="Dark2")
 ```
 
 There are some null age values...
@@ -42,7 +77,7 @@ table(is.na(train$Age))
 prop.table(table(is.na(train$Age)))
 ```
 
-almost 20% of the observations are missing an age value.
+almost 20% of the observations are missing an age value. If I were to impute age based on the average it would look like the chart below.
 
 ```{r}
 train <- iceberg::impute_passenger_age(train)
@@ -57,7 +92,7 @@ ap
 ag_plt_df <- train[, .(Survived=sum(Survived)), by=c('AgeGroup','Sex')]
 ag_all_df <- train[, .(Survived=sum(Survived)), by=c('Age','Sex')]
 
-ggplot(ag_plt_df, aes(x=AgeGroup,y=Survived, fill=Sex)) + geom_col() +
+ggplot(ag_plt_df, aes(x=AgeGroup,y=Sex, fill=Survived)) + geom_col(position = 'fill') +
   coord_flip() + 
   labs(title = 'Count of Survived Passengers by Age Group and Sex')
 
@@ -65,7 +100,7 @@ ggplot(ag_all_df, aes(x=Age, y=Survived, colour=Sex)) + geom_point()
 ```
 
 ```{r}
-ap + facet_wrap('Embarked') +
+ap + facet_wrap('Embarked')
   
 prop.table(table(train$Sex,train$Embarked))
 ```
