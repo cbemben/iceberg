@@ -32,7 +32,7 @@ It's a common anecdote that women and children were the first passengers saved s
 
 ```{r}
 train <- train[!is.na(train$Age),]
-test <- test[!is.na(test$Age),]
+test <- iceberg::impute_passenger_age(test)
 
 train_idx <- sample(nrow(train), nrow(train)*0.8)
 test_idx <- setdiff(seq_len(nrow(train)), train_idx)
