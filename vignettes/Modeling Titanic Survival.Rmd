@@ -113,14 +113,30 @@ test$Survived <- apply(pred_samp$y_new, 2, median)
 
 The anecdote we started with was that women and children were saved first and based on the initial model above this appears to be a true statement. To build on the anecdote, passengers with a higher societal standing also were given priority over lower-class passengers. To build on the model above, I'll add passenger class as an additional input into the model and see how much improvement is achieved.
 
+Since this is a categorical variable I'll transform the current `Pclass` variable into 3 dummy variables and add a coefficient to the model for each of the dummy vars.
+
+```{r}
+train$class_1 <- ifelse(train$Pclass == 1,1,0)
+train$class_2 <- ifelse(train$Pclass == 2,1,0)
+train$class_3 <- ifelse(train$Pclass == 3,1,0)
+
+test$class_1 <- ifelse(test$Pclass == 1,1,0)
+test$class_2 <- ifelse(test$Pclass == 2,1,0)
+test$class_3 <- ifelse(test$Pclass == 3,1,0)
+```
+
 ```{r}
 class_mod <- iceberg::age_gender_class_stan(age=train[train_idx,'Age'],
-                                    pclass=train[train_idx,'Pclass'],
+                                    class_1=train[train_idx,'class_1'],
+                                    class_2=train[train_idx,'class_2'],
+                                    class_3=train[train_idx,'class_3'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
                                     survived=train[train_idx,'Survived'],
                                     test_age=train[test_idx,'Age'],
-                                    test_pclass=train[test_idx,'Pclass'],
+                                    test_class_1=train[test_idx,'class_1'],
+                                    test_class_2=train[test_idx,'class_2'],
+                                    test_class_3=train[test_idx,'class_3'],
                                     test_sex_idx=as.integer(train[test_idx,'Sex'])
                                     , seed=124
                                     )
