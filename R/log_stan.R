@@ -37,16 +37,21 @@ age_gender_stan <- function(age, sex_cats, sex_idx, survived, test_sex_idx, test
 #' @param ... Arguments passed to `rstan::sampling` (e.g. iter, chains).
 #' @return An object of class `stanfit` returned by `rstan::sampling`
 #'
-age_gender_class_stan <- function(age, pclass, sex_cats, sex_idx, survived, test_sex_idx, test_age, test_pclass, ...) {
+age_gender_class_stan <- function(age, class_1, class_2, class_3, sex_cats, sex_idx,
+                                  survived, test_sex_idx, test_age, test_class_1, test_class_2, test_class_3, ...) {
   standata <- list(N=length(survived),
                    age=age,
-                   pclass=pclass,
+                   class_1=class_1,
+                   class_2=class_2,
+                   class_3=class_3,
                    sex=sex_cats,
                    sex_idx=sex_idx,
                    survived=survived,
                    test_N=length(test_age),
                    test_age=test_age,
-                   test_pclass = test_pclass,
+                   test_class_1=test_class_1,
+                   test_class_2=test_class_2,
+                   test_class_3=test_class_3,
                    test_sex_idx=test_sex_idx)
   out <- rstan::sampling(stanmodels$age_gender_class_model, data = standata, ...)
   return(out)

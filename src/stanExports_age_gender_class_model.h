@@ -33,7 +33,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_age_gender_class_model");
-    reader.add_event(45, 43, "end", "model_age_gender_class_model");
+    reader.add_event(53, 51, "end", "model_age_gender_class_model");
     return reader;
 }
 #include <stan_meta_header.hpp>
@@ -43,12 +43,16 @@ private:
         int N;
         std::vector<int> survived;
         vector_d age;
-        vector_d pclass;
+        vector_d class_1;
+        vector_d class_2;
+        vector_d class_3;
         int sex;
         std::vector<int> sex_idx;
         int test_N;
         vector_d test_age;
-        vector_d test_pclass;
+        vector_d test_class_1;
+        vector_d test_class_2;
+        vector_d test_class_3;
         std::vector<int> test_sex_idx;
 public:
     model_age_gender_class_model(stan::io::var_context& context__,
@@ -114,24 +118,49 @@ public:
             }
             check_greater_or_equal(function__, "age", age, 0);
             current_statement_begin__ = 6;
-            validate_non_negative_index("pclass", "N", N);
-            context__.validate_dims("data initialization", "pclass", "vector_d", context__.to_vec(N));
-            pclass = Eigen::Matrix<double, Eigen::Dynamic, 1>(N);
-            vals_r__ = context__.vals_r("pclass");
+            validate_non_negative_index("class_1", "N", N);
+            context__.validate_dims("data initialization", "class_1", "vector_d", context__.to_vec(N));
+            class_1 = Eigen::Matrix<double, Eigen::Dynamic, 1>(N);
+            vals_r__ = context__.vals_r("class_1");
             pos__ = 0;
-            size_t pclass_j_1_max__ = N;
-            for (size_t j_1__ = 0; j_1__ < pclass_j_1_max__; ++j_1__) {
-                pclass(j_1__) = vals_r__[pos__++];
+            size_t class_1_j_1_max__ = N;
+            for (size_t j_1__ = 0; j_1__ < class_1_j_1_max__; ++j_1__) {
+                class_1(j_1__) = vals_r__[pos__++];
             }
-            check_greater_or_equal(function__, "pclass", pclass, 1);
+            check_greater_or_equal(function__, "class_1", class_1, 0);
+            check_less_or_equal(function__, "class_1", class_1, 1);
             current_statement_begin__ = 7;
+            validate_non_negative_index("class_2", "N", N);
+            context__.validate_dims("data initialization", "class_2", "vector_d", context__.to_vec(N));
+            class_2 = Eigen::Matrix<double, Eigen::Dynamic, 1>(N);
+            vals_r__ = context__.vals_r("class_2");
+            pos__ = 0;
+            size_t class_2_j_1_max__ = N;
+            for (size_t j_1__ = 0; j_1__ < class_2_j_1_max__; ++j_1__) {
+                class_2(j_1__) = vals_r__[pos__++];
+            }
+            check_greater_or_equal(function__, "class_2", class_2, 0);
+            check_less_or_equal(function__, "class_2", class_2, 1);
+            current_statement_begin__ = 8;
+            validate_non_negative_index("class_3", "N", N);
+            context__.validate_dims("data initialization", "class_3", "vector_d", context__.to_vec(N));
+            class_3 = Eigen::Matrix<double, Eigen::Dynamic, 1>(N);
+            vals_r__ = context__.vals_r("class_3");
+            pos__ = 0;
+            size_t class_3_j_1_max__ = N;
+            for (size_t j_1__ = 0; j_1__ < class_3_j_1_max__; ++j_1__) {
+                class_3(j_1__) = vals_r__[pos__++];
+            }
+            check_greater_or_equal(function__, "class_3", class_3, 0);
+            check_less_or_equal(function__, "class_3", class_3, 1);
+            current_statement_begin__ = 9;
             context__.validate_dims("data initialization", "sex", "int", context__.to_vec());
             sex = int(0);
             vals_i__ = context__.vals_i("sex");
             pos__ = 0;
             sex = vals_i__[pos__++];
             check_greater_or_equal(function__, "sex", sex, 0);
-            current_statement_begin__ = 8;
+            current_statement_begin__ = 10;
             validate_non_negative_index("sex_idx", "N", N);
             context__.validate_dims("data initialization", "sex_idx", "int", context__.to_vec(N));
             sex_idx = std::vector<int>(N, int(0));
@@ -146,14 +175,14 @@ public:
                 check_greater_or_equal(function__, "sex_idx[i_0__]", sex_idx[i_0__], 1);
                 check_less_or_equal(function__, "sex_idx[i_0__]", sex_idx[i_0__], sex);
             }
-            current_statement_begin__ = 11;
+            current_statement_begin__ = 13;
             context__.validate_dims("data initialization", "test_N", "int", context__.to_vec());
             test_N = int(0);
             vals_i__ = context__.vals_i("test_N");
             pos__ = 0;
             test_N = vals_i__[pos__++];
             check_greater_or_equal(function__, "test_N", test_N, 0);
-            current_statement_begin__ = 12;
+            current_statement_begin__ = 14;
             validate_non_negative_index("test_age", "test_N", test_N);
             context__.validate_dims("data initialization", "test_age", "vector_d", context__.to_vec(test_N));
             test_age = Eigen::Matrix<double, Eigen::Dynamic, 1>(test_N);
@@ -164,18 +193,43 @@ public:
                 test_age(j_1__) = vals_r__[pos__++];
             }
             check_greater_or_equal(function__, "test_age", test_age, 0);
-            current_statement_begin__ = 13;
-            validate_non_negative_index("test_pclass", "test_N", test_N);
-            context__.validate_dims("data initialization", "test_pclass", "vector_d", context__.to_vec(test_N));
-            test_pclass = Eigen::Matrix<double, Eigen::Dynamic, 1>(test_N);
-            vals_r__ = context__.vals_r("test_pclass");
-            pos__ = 0;
-            size_t test_pclass_j_1_max__ = test_N;
-            for (size_t j_1__ = 0; j_1__ < test_pclass_j_1_max__; ++j_1__) {
-                test_pclass(j_1__) = vals_r__[pos__++];
-            }
-            check_greater_or_equal(function__, "test_pclass", test_pclass, 1);
             current_statement_begin__ = 15;
+            validate_non_negative_index("test_class_1", "test_N", test_N);
+            context__.validate_dims("data initialization", "test_class_1", "vector_d", context__.to_vec(test_N));
+            test_class_1 = Eigen::Matrix<double, Eigen::Dynamic, 1>(test_N);
+            vals_r__ = context__.vals_r("test_class_1");
+            pos__ = 0;
+            size_t test_class_1_j_1_max__ = test_N;
+            for (size_t j_1__ = 0; j_1__ < test_class_1_j_1_max__; ++j_1__) {
+                test_class_1(j_1__) = vals_r__[pos__++];
+            }
+            check_greater_or_equal(function__, "test_class_1", test_class_1, 0);
+            check_less_or_equal(function__, "test_class_1", test_class_1, 1);
+            current_statement_begin__ = 16;
+            validate_non_negative_index("test_class_2", "test_N", test_N);
+            context__.validate_dims("data initialization", "test_class_2", "vector_d", context__.to_vec(test_N));
+            test_class_2 = Eigen::Matrix<double, Eigen::Dynamic, 1>(test_N);
+            vals_r__ = context__.vals_r("test_class_2");
+            pos__ = 0;
+            size_t test_class_2_j_1_max__ = test_N;
+            for (size_t j_1__ = 0; j_1__ < test_class_2_j_1_max__; ++j_1__) {
+                test_class_2(j_1__) = vals_r__[pos__++];
+            }
+            check_greater_or_equal(function__, "test_class_2", test_class_2, 0);
+            check_less_or_equal(function__, "test_class_2", test_class_2, 1);
+            current_statement_begin__ = 17;
+            validate_non_negative_index("test_class_3", "test_N", test_N);
+            context__.validate_dims("data initialization", "test_class_3", "vector_d", context__.to_vec(test_N));
+            test_class_3 = Eigen::Matrix<double, Eigen::Dynamic, 1>(test_N);
+            vals_r__ = context__.vals_r("test_class_3");
+            pos__ = 0;
+            size_t test_class_3_j_1_max__ = test_N;
+            for (size_t j_1__ = 0; j_1__ < test_class_3_j_1_max__; ++j_1__) {
+                test_class_3(j_1__) = vals_r__[pos__++];
+            }
+            check_greater_or_equal(function__, "test_class_3", test_class_3, 0);
+            check_less_or_equal(function__, "test_class_3", test_class_3, 1);
+            current_statement_begin__ = 19;
             validate_non_negative_index("test_sex_idx", "test_N", test_N);
             context__.validate_dims("data initialization", "test_sex_idx", "int", context__.to_vec(test_N));
             test_sex_idx = std::vector<int>(test_N, int(0));
@@ -196,11 +250,15 @@ public:
             // validate, set parameter ranges
             num_params_r__ = 0U;
             param_ranges_i__.clear();
-            current_statement_begin__ = 19;
+            current_statement_begin__ = 23;
             num_params_r__ += 1;
-            current_statement_begin__ = 20;
+            current_statement_begin__ = 24;
             num_params_r__ += 1;
-            current_statement_begin__ = 21;
+            current_statement_begin__ = 25;
+            num_params_r__ += 1;
+            current_statement_begin__ = 26;
+            num_params_r__ += 1;
+            current_statement_begin__ = 27;
             validate_non_negative_index("alpha", "sex", sex);
             num_params_r__ += sex;
         } catch (const std::exception& e) {
@@ -220,7 +278,7 @@ public:
         (void) pos__; // dummy call to supress warning
         std::vector<double> vals_r__;
         std::vector<int> vals_i__;
-        current_statement_begin__ = 19;
+        current_statement_begin__ = 23;
         if (!(context__.contains_r("beta")))
             stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta missing")), current_statement_begin__, prog_reader__());
         vals_r__ = context__.vals_r("beta");
@@ -233,20 +291,46 @@ public:
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta: ") + e.what()), current_statement_begin__, prog_reader__());
         }
-        current_statement_begin__ = 20;
-        if (!(context__.contains_r("beta_class")))
-            stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta_class missing")), current_statement_begin__, prog_reader__());
-        vals_r__ = context__.vals_r("beta_class");
+        current_statement_begin__ = 24;
+        if (!(context__.contains_r("beta_class_1")))
+            stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta_class_1 missing")), current_statement_begin__, prog_reader__());
+        vals_r__ = context__.vals_r("beta_class_1");
         pos__ = 0U;
-        context__.validate_dims("parameter initialization", "beta_class", "double", context__.to_vec());
-        double beta_class(0);
-        beta_class = vals_r__[pos__++];
+        context__.validate_dims("parameter initialization", "beta_class_1", "double", context__.to_vec());
+        double beta_class_1(0);
+        beta_class_1 = vals_r__[pos__++];
         try {
-            writer__.scalar_unconstrain(beta_class);
+            writer__.scalar_unconstrain(beta_class_1);
         } catch (const std::exception& e) {
-            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta_class: ") + e.what()), current_statement_begin__, prog_reader__());
+            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta_class_1: ") + e.what()), current_statement_begin__, prog_reader__());
         }
-        current_statement_begin__ = 21;
+        current_statement_begin__ = 25;
+        if (!(context__.contains_r("beta_class_2")))
+            stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta_class_2 missing")), current_statement_begin__, prog_reader__());
+        vals_r__ = context__.vals_r("beta_class_2");
+        pos__ = 0U;
+        context__.validate_dims("parameter initialization", "beta_class_2", "double", context__.to_vec());
+        double beta_class_2(0);
+        beta_class_2 = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(beta_class_2);
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta_class_2: ") + e.what()), current_statement_begin__, prog_reader__());
+        }
+        current_statement_begin__ = 26;
+        if (!(context__.contains_r("beta_class_3")))
+            stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta_class_3 missing")), current_statement_begin__, prog_reader__());
+        vals_r__ = context__.vals_r("beta_class_3");
+        pos__ = 0U;
+        context__.validate_dims("parameter initialization", "beta_class_3", "double", context__.to_vec());
+        double beta_class_3(0);
+        beta_class_3 = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(beta_class_3);
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta_class_3: ") + e.what()), current_statement_begin__, prog_reader__());
+        }
+        current_statement_begin__ = 27;
         if (!(context__.contains_r("alpha")))
             stan::lang::rethrow_located(std::runtime_error(std::string("Variable alpha missing")), current_statement_begin__, prog_reader__());
         vals_r__ = context__.vals_r("alpha");
@@ -288,21 +372,35 @@ public:
         try {
             stan::io::reader<local_scalar_t__> in__(params_r__, params_i__);
             // model parameters
-            current_statement_begin__ = 19;
+            current_statement_begin__ = 23;
             local_scalar_t__ beta;
             (void) beta;  // dummy to suppress unused var warning
             if (jacobian__)
                 beta = in__.scalar_constrain(lp__);
             else
                 beta = in__.scalar_constrain();
-            current_statement_begin__ = 20;
-            local_scalar_t__ beta_class;
-            (void) beta_class;  // dummy to suppress unused var warning
+            current_statement_begin__ = 24;
+            local_scalar_t__ beta_class_1;
+            (void) beta_class_1;  // dummy to suppress unused var warning
             if (jacobian__)
-                beta_class = in__.scalar_constrain(lp__);
+                beta_class_1 = in__.scalar_constrain(lp__);
             else
-                beta_class = in__.scalar_constrain();
-            current_statement_begin__ = 21;
+                beta_class_1 = in__.scalar_constrain();
+            current_statement_begin__ = 25;
+            local_scalar_t__ beta_class_2;
+            (void) beta_class_2;  // dummy to suppress unused var warning
+            if (jacobian__)
+                beta_class_2 = in__.scalar_constrain(lp__);
+            else
+                beta_class_2 = in__.scalar_constrain();
+            current_statement_begin__ = 26;
+            local_scalar_t__ beta_class_3;
+            (void) beta_class_3;  // dummy to suppress unused var warning
+            if (jacobian__)
+                beta_class_3 = in__.scalar_constrain(lp__);
+            else
+                beta_class_3 = in__.scalar_constrain();
+            current_statement_begin__ = 27;
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> alpha;
             (void) alpha;  // dummy to suppress unused var warning
             if (jacobian__)
@@ -310,12 +408,16 @@ public:
             else
                 alpha = in__.vector_constrain(sex);
             // model body
-            current_statement_begin__ = 25;
+            current_statement_begin__ = 31;
             lp_accum__.add(normal_log<propto__>(beta, 0, 1));
-            current_statement_begin__ = 26;
-            lp_accum__.add(normal_log<propto__>(beta_class, 0, 1));
-            current_statement_begin__ = 28;
-            lp_accum__.add(bernoulli_logit_log<propto__>(survived, add(add(stan::model::rvalue(alpha, stan::model::cons_list(stan::model::index_multi(sex_idx), stan::model::nil_index_list()), "alpha"), multiply(beta, age)), multiply(beta_class, pclass))));
+            current_statement_begin__ = 32;
+            lp_accum__.add(normal_log<propto__>(beta_class_1, 0, 1));
+            current_statement_begin__ = 33;
+            lp_accum__.add(normal_log<propto__>(beta_class_2, 0, 1));
+            current_statement_begin__ = 34;
+            lp_accum__.add(normal_log<propto__>(beta_class_3, 0, 1));
+            current_statement_begin__ = 36;
+            lp_accum__.add(bernoulli_logit_log<propto__>(survived, add(add(add(add(stan::model::rvalue(alpha, stan::model::cons_list(stan::model::index_multi(sex_idx), stan::model::nil_index_list()), "alpha"), multiply(beta, age)), multiply(beta_class_1, class_1)), multiply(beta_class_2, class_2)), multiply(beta_class_3, class_3))));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
             // Next line prevents compiler griping about no return
@@ -337,7 +439,9 @@ public:
     void get_param_names(std::vector<std::string>& names__) const {
         names__.resize(0);
         names__.push_back("beta");
-        names__.push_back("beta_class");
+        names__.push_back("beta_class_1");
+        names__.push_back("beta_class_2");
+        names__.push_back("beta_class_3");
         names__.push_back("alpha");
         names__.push_back("y_new");
         names__.push_back("y_rep");
@@ -345,6 +449,10 @@ public:
     void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
         dimss__.resize(0);
         std::vector<size_t> dims__;
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
@@ -375,8 +483,12 @@ public:
         // read-transform, write parameters
         double beta = in__.scalar_constrain();
         vars__.push_back(beta);
-        double beta_class = in__.scalar_constrain();
-        vars__.push_back(beta_class);
+        double beta_class_1 = in__.scalar_constrain();
+        vars__.push_back(beta_class_1);
+        double beta_class_2 = in__.scalar_constrain();
+        vars__.push_back(beta_class_2);
+        double beta_class_3 = in__.scalar_constrain();
+        vars__.push_back(beta_class_3);
         Eigen::Matrix<double, Eigen::Dynamic, 1> alpha = in__.vector_constrain(sex);
         size_t alpha_j_1_max__ = sex;
         for (size_t j_1__ = 0; j_1__ < alpha_j_1_max__; ++j_1__) {
@@ -392,39 +504,39 @@ public:
             if (!include_gqs__ && !include_tparams__) return;
             if (!include_gqs__) return;
             // declare and define generated quantities
-            current_statement_begin__ = 32;
+            current_statement_begin__ = 40;
             validate_non_negative_index("y_new", "test_N", test_N);
             Eigen::Matrix<double, Eigen::Dynamic, 1> y_new(test_N);
             stan::math::initialize(y_new, DUMMY_VAR__);
             stan::math::fill(y_new, DUMMY_VAR__);
-            current_statement_begin__ = 33;
+            current_statement_begin__ = 41;
             validate_non_negative_index("y_rep", "N", N);
             std::vector<int> y_rep(N, int(0));
             stan::math::fill(y_rep, std::numeric_limits<int>::min());
             // generated quantities statements
-            current_statement_begin__ = 35;
+            current_statement_begin__ = 43;
             for (int n = 1; n <= N; ++n) {
-                current_statement_begin__ = 36;
+                current_statement_begin__ = 44;
                 stan::model::assign(y_rep, 
                             stan::model::cons_list(stan::model::index_uni(n), stan::model::nil_index_list()), 
-                            bernoulli_logit_rng(((get_base1(alpha, get_base1(sex_idx, n, "sex_idx", 1), "alpha", 1) + (beta * get_base1(age, n, "age", 1))) + (beta_class * get_base1(pclass, n, "pclass", 1))), base_rng__), 
+                            bernoulli_logit_rng(((((get_base1(alpha, get_base1(sex_idx, n, "sex_idx", 1), "alpha", 1) + (beta * get_base1(age, n, "age", 1))) + (beta_class_1 * get_base1(class_1, n, "class_1", 1))) + (beta_class_2 * get_base1(class_2, n, "class_2", 1))) + (beta_class_3 * get_base1(class_3, n, "class_3", 1))), base_rng__), 
                             "assigning variable y_rep");
             }
-            current_statement_begin__ = 40;
+            current_statement_begin__ = 48;
             for (int i = 1; i <= test_N; ++i) {
-                current_statement_begin__ = 41;
+                current_statement_begin__ = 49;
                 stan::model::assign(y_new, 
                             stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
-                            bernoulli_logit_rng(((get_base1(alpha, get_base1(test_sex_idx, i, "test_sex_idx", 1), "alpha", 1) + (beta * get_base1(test_age, i, "test_age", 1))) + (beta_class * get_base1(test_pclass, i, "test_pclass", 1))), base_rng__), 
+                            bernoulli_logit_rng(((((get_base1(alpha, get_base1(test_sex_idx, i, "test_sex_idx", 1), "alpha", 1) + (beta * get_base1(test_age, i, "test_age", 1))) + (beta_class_1 * get_base1(test_class_1, i, "test_class_1", 1))) + (beta_class_2 * get_base1(test_class_2, i, "test_class_2", 1))) + (beta_class_3 * get_base1(test_class_3, i, "test_class_3", 1))), base_rng__), 
                             "assigning variable y_new");
             }
             // validate, write generated quantities
-            current_statement_begin__ = 32;
+            current_statement_begin__ = 40;
             size_t y_new_j_1_max__ = test_N;
             for (size_t j_1__ = 0; j_1__ < y_new_j_1_max__; ++j_1__) {
                 vars__.push_back(y_new(j_1__));
             }
-            current_statement_begin__ = 33;
+            current_statement_begin__ = 41;
             size_t y_rep_k_0_max__ = N;
             for (size_t k_0__ = 0; k_0__ < y_rep_k_0_max__; ++k_0__) {
                 vars__.push_back(y_rep[k_0__]);
@@ -463,7 +575,13 @@ public:
         param_name_stream__ << "beta";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "beta_class";
+        param_name_stream__ << "beta_class_1";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "beta_class_2";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "beta_class_3";
         param_names__.push_back(param_name_stream__.str());
         size_t alpha_j_1_max__ = sex;
         for (size_t j_1__ = 0; j_1__ < alpha_j_1_max__; ++j_1__) {
@@ -496,7 +614,13 @@ public:
         param_name_stream__ << "beta";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "beta_class";
+        param_name_stream__ << "beta_class_1";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "beta_class_2";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "beta_class_3";
         param_names__.push_back(param_name_stream__.str());
         size_t alpha_j_1_max__ = sex;
         for (size_t j_1__ = 0; j_1__ < alpha_j_1_max__; ++j_1__) {
