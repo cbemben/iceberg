@@ -144,7 +144,7 @@ class_mod <- iceberg::age_gender_class_stan(age=train[train_idx,'Age'],
 
 ```{r}
 class_fit <- rstan::extract(class_mod)
-print(class_mod, pars=c("alpha","beta","beta_class"))
+print(class_mod, pars=c("alpha","beta","beta_class_1","beta_class_2","beta_class_3"))
 ```
 
 Checking the accuracy against my test partition.
@@ -158,9 +158,9 @@ The accuracy seems to have barely improved...
 ```{r, message=FALSE}
 bayesplot::mcmc_intervals(class_mod, pars=c("alpha[1]","alpha[2]"), prob=0.8) +
   ggplot2::labs(title = 'MCMC Intervals on Gender Based Intercepts') +
-  ggplot2::scale_y_discrete(labels = c("alpha[1]"="Male", "alpha[2]"="Female"))
+  ggplot2::scale_y_discrete(labels = c("alpha[1]"="Female", "alpha[2]"="Male"))
 
-bayesplot::mcmc_intervals(class_mod, pars=c("beta","beta_class"), prob=0.8) +
+bayesplot::mcmc_intervals(class_mod, pars=c("beta","beta_class_1","beta_class_2","beta_class_3"), prob=0.8) +
   ggplot2::labs(title = 'Coefficients on Age and Passenger Class')
 ```
 
@@ -170,12 +170,16 @@ bayesplot::ppc_stat_grouped(y = train[test_idx,"Survived"], yrep = class_fit$y_n
 
 ```{r}
 class_predict <- iceberg::age_gender_class_stan(age=train[train_idx,'Age'],
-                                    pclass=train[train_idx,'Pclass'],
+                                    class_1=train[train_idx,'class_1'],
+                                    class_2=train[train_idx,'class_2'],
+                                    class_3=train[train_idx,'class_3'],
                                     sex=2,
                                     sex_idx=as.integer(train[train_idx,'Sex']),
                                     survived=train[train_idx,'Survived'],
                                     test_age=test$Age,
-                                    test_pclass=test$Pclass,
+                                    test_class_1=test$class_1,
+                                    test_class_2=test$class_2,
+                                    test_class_3=test$class_3,
                                     test_sex_idx=as.integer(test$Sex)
                                     , seed=124
                                     )
@@ -186,7 +190,7 @@ Export the predictions and push to Kaggle.
 ```{r}
 class_pred <- rstan::extract(class_predict)
 test$Survived <- apply(class_pred$y_new, 2, median)
-#write.csv(test[,c("PassengerId","Survived")] ,file="~/projectrepos/iceberg/inst/extdata/predict_age_class.csv", row.names = FALSE)
+#write.csv(test[,c("PassengerId","Survived")] ,file="~/projectrepos/iceberg/inst/extdata/predict_age_class_20201119.csv", row.names = FALSE)
 ```
 
 ## Stan Models

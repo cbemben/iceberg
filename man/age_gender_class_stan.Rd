@@ -6,20 +6,22 @@
 \usage{
 age_gender_class_stan(
   age,
-  pclass,
+  class_1,
+  class_2,
+  class_3,
   sex_cats,
   sex_idx,
   survived,
   test_sex_idx,
   test_age,
-  test_pclass,
+  test_class_1,
+  test_class_2,
+  test_class_3,
   ...
 )
 }
 \arguments{
 \item{age}{Numeric vector of age values.}
-
-\item{pclass}{integer value of the passengers class status.}
 
 \item{sex_cats}{integer value of total number of sexes possible (in this case it's 2).}
 
@@ -31,9 +33,11 @@ age_gender_class_stan(
 
 \item{test_age}{Numeric vector of age values from test dataset.}
 
-\item{test_pclass}{integer value of the test dataset for passenger class status.}
-
 \item{...}{Arguments passed to \code{rstan::sampling} (e.g. iter, chains).}
+
+\item{pclass}{integer value of the passengers class status.}
+
+\item{test_pclass}{integer value of the test dataset for passenger class status.}
 }
 \value{
 An object of class \code{stanfit} returned by \code{rstan::sampling}
