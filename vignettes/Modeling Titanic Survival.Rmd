@@ -25,17 +25,17 @@ library(bayesplot)
 train <- iceberg::titanic_train
 test <- iceberg::titanic_test
 
-train_idx <- sample(nrow(train), nrow(train)*0.8)
-test_idx <- setdiff(seq_len(nrow(train)), train_idx)
-
 str(train)
 ```
 
-It's a common anecdote that women and children were the first passengers saved so the first model will only use age and gender as predictors. Since there is a substantial number of missing age values, nulls will be imputed, see the `Impute Passenger Age` function for the details of the imputation methodology or the `Exploratory Data Analysis` vignette to see the before after.
+It's a common anecdote that women and children were the first passengers saved so the first model will only use age and gender as predictors. There are a substantial number of missing age values which I'm not going to impute to begin with, that work may come later.
 
 ```{r}
-train <- iceberg::impute_passenger_age(train)
-test <- iceberg:: impute_passenger_age(test)
+train <- train[!is.na(train$Age),]
+test <- test[!is.na(test$Age),]
+
+train_idx <- sample(nrow(train), nrow(train)*0.8)
+test_idx <- setdiff(seq_len(nrow(train)), train_idx)
 ```
 
 ## Modeling
