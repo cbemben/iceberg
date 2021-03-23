@@ -89,17 +89,6 @@ ap
 ```
 
 ```{r}
-ag_plt_df <- train[, .(Survived=sum(Survived)), by=c('AgeGroup','Sex')]
-ag_all_df <- train[, .(Survived=sum(Survived)), by=c('Age','Sex')]
-
-ggplot(ag_plt_df, aes(x=AgeGroup,y=Sex, fill=Survived)) + geom_col(position = 'fill') +
-  coord_flip() + 
-  labs(title = 'Count of Survived Passengers by Age Group and Sex')
-
-ggplot(ag_all_df, aes(x=Age, y=Survived, colour=Sex)) + geom_point()
-```
-
-```{r}
 ap + facet_wrap('Embarked')
   
 prop.table(table(train$Sex,train$Embarked))
