@@ -1,0 +1,4 @@
+repo:
+  url:
+    home: https://github.com/cbemben/iceberg
+    source: https://github.com/r-lib/pkgdown/blob/master/
