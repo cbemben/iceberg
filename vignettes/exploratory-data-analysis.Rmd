@@ -38,12 +38,11 @@ train$PassengerStatus <- as.factor(ifelse(train$Survived == 1, 'Survived','Died'
 The story goes, that women and children were saved first.
 
 ```{r}
-ggplot(train, aes(x=Sex, y=Age, fill=PassengerStatus)) + geom_bar(position = 'fill', stat='identity') +
-    labs(title = "Proportion of Survival by Gender and Age") +
-    scale_fill_brewer(palette="Dark2")
+ggplot(train, aes(x=Age, fill=PassengerStatus)) + geom_histogram(position = 'stack', alpha=0.5, binwidth = 7) +
+  facet_wrap(.~Sex)
 ```
 
-It does appear that a lot more women and younger males were saved.
+It does appear that more women (as a percentage of all women) and some males were saved.
 
 ```{r}
 ggplot(train, aes(x=Sex, y=Age, fill=PassengerStatus)) + geom_bar(position = 'fill', stat='identity') +

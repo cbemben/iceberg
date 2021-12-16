@@ -38,6 +38,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -56,7 +62,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/cbemben/iceberg">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -72,7 +85,7 @@
       <h1 data-toc-skip>Exploratory Data Analysis</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/pkgdown/blob/master/vignettes/exploratory-data-analysis.Rmd"><code>vignettes/exploratory-data-analysis.Rmd</code></a></small>
       <div class="hidden name"><code>exploratory-data-analysis.Rmd</code></div>
 
     </div>
@@ -80,10 +93,10 @@
     
     
 <p>Get the training data, see <code>titanic_train</code> for more info.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">iceberg</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-datatable.com">data.table</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">iceberg</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://Rdatatable.gitlab.io/data.table">data.table</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">train</span> <span class="op">&lt;-</span> <span class="fu">iceberg</span><span class="fu">::</span><span class="va"><a href="../reference/titanic_train.html">titanic_train</a></span>
 <span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span>
@@ -101,10 +114,10 @@
 <span class="co">#&gt;  $ Fare       : num  7.25 71.28 7.92 53.1 8.05 ...</span>
 <span class="co">#&gt;  $ Cabin      : Factor w/ 148 levels "","A10","A14",..: 1 83 1 57 1 1 131 1 1 1 ...</span>
 <span class="co">#&gt;  $ Embarked   : Factor w/ 4 levels "","C","Q","S": 4 2 4 4 4 3 4 4 4 2 ...</span>
-<span class="co">#&gt;  - attr(*, ".internal.selfref")=&lt;externalptr&gt;</span></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">#for plots</span>
-<span class="va">train</span><span class="op">$</span><span class="va">PassengerStatus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Survived</span> <span class="op">==</span> <span class="fl">1</span>, <span class="st">'Survived'</span>,<span class="st">'Died'</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="co">#&gt;  - attr(*, ".internal.selfref")=&lt;externalptr&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#for plots</span>
+<span class="va">train</span><span class="op">$</span><span class="va">PassengerStatus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Survived</span> <span class="op">==</span> <span class="fl">1</span>, <span class="st">'Survived'</span>,<span class="st">'Died'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div id="passanger-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#passanger-analysis" class="anchor"></a>Passanger Analysis</h2>
@@ -112,66 +125,65 @@
 <h3 class="hasAnchor">
 <a href="#who-survived" class="anchor"></a>Who Survived?</h3>
 <p>The story goes, that women and children were saved first.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Proportion of Survival by Gender and Age"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Dark2"</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'stack'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, binwidth <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">.</span><span class="op">~</span><span class="va">Sex</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Removed 177 rows containing non-finite values (stat_bin).</span></code></pre></div>
 <p><img src="exploratory-data-analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>It does appear that a lot more women and younger males were saved.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
+<p>It does appear that more women (as a percentage of all women) and some males were saved.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">.</span><span class="op">~</span><span class="va">Pclass</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Proportion of Survival by Gender and Age"</span>,
          subtitle <span class="op">=</span> <span class="st">"Faceted by Passenger Class"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Dark2"</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></pre></div>
+<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></code></pre></div>
 <p><img src="exploratory-data-analysis_files/figure-html/unnamed-chunk-5-1.png" width="700"> Dang, you don’t want to be in 3rd class, survival rate for male and female is less than 50%.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">.</span><span class="op">~</span><span class="va">Parch</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Proportion of Survival by Gender and Age"</span>,
          subtitle <span class="op">=</span> <span class="st">"Faceted by Passenger Parch"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Dark2"</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></pre></div>
+<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></code></pre></div>
 <p><img src="exploratory-data-analysis_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Sex</span>, y<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">PassengerStatus</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'fill'</span>, stat<span class="op">=</span><span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">.</span><span class="op">~</span><span class="va">Embarked</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Proportion of Survival by Gender and Age"</span>,
          subtitle <span class="op">=</span> <span class="st">"Faceted by Passenger Embarked"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Dark2"</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></pre></div>
+<span class="co">#&gt; Warning: Removed 177 rows containing missing values (position_stack).</span></code></pre></div>
 <p><img src="exploratory-data-analysis_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>There are some null age values…</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Age</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Age</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; FALSE  TRUE </span>
 <span class="co">#&gt;   714   177</span>
-<span class="fu"><a href="https://rdrr.io/r/base/prop.table.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Age</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/proportions.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Age</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     FALSE      TRUE </span>
-<span class="co">#&gt; 0.8013468 0.1986532</span></pre></div>
+<span class="co">#&gt; 0.8013468 0.1986532</span></code></pre></div>
 <p>almost 20% of the observations are missing an age value. If I were to impute age based on the average it would look like the chart below.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">train</span> <span class="op">&lt;-</span> <span class="fu">iceberg</span><span class="fu">::</span><span class="fu"><a href="../reference/impute_passenger_age.html">impute_passenger_age</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu">iceberg</span><span class="fu">::</span><span class="fu"><a href="../reference/impute_passenger_age.html">impute_passenger_age</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span>
 <span class="va">train</span><span class="op">$</span><span class="va">AgeGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Age</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">17</span>,<span class="fl">30</span>,<span class="fl">40</span>,<span class="fl">50</span>,<span class="fl">65</span>,<span class="fl">80</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'&lt;17'</span>,<span class="st">'18-30'</span>,<span class="st">'31-40'</span>,<span class="st">'41-50'</span>,<span class="st">'51-65'</span>,<span class="st">'&gt;=66'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">ap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">train</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Age</span>, fill<span class="op">=</span><span class="va">Sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">'stack'</span>, alpha<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span>
 
-<span class="va">ap</span></pre></div>
+<span class="va">ap</span></code></pre></div>
 <p><img src="exploratory-data-analysis_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">ap</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="st">'Embarked'</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ap</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="st">'Embarked'</span><span class="op">)</span></code></pre></div>
 <p><img src="exploratory-data-analysis_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-  
-<span class="fu"><a href="https://rdrr.io/r/base/prop.table.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Sex</span>,<span class="va">train</span><span class="op">$</span><span class="va">Embarked</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R">  
+<span class="fu"><a href="https://rdrr.io/r/base/proportions.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">Sex</span>,<span class="va">train</span><span class="op">$</span><span class="va">Embarked</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;         </span>
 <span class="co">#&gt;                                C           Q           S</span>
 <span class="co">#&gt;   female 0.002244669 0.081930415 0.040404040 0.227833895</span>
-<span class="co">#&gt;   male   0.000000000 0.106621773 0.046015713 0.494949495</span></pre></div>
+<span class="co">#&gt;   male   0.000000000 0.106621773 0.046015713 0.494949495</span></code></pre></div>
 </div>
 </div>
   </div>
@@ -191,7 +203,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
