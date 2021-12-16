@@ -35,7 +35,7 @@ train$PassengerStatus <- as.factor(ifelse(train$Survived == 1, 'Survived','Died'
 
 ### Who Survived?
 
-The story goes, that women and children were saved first.
+The story goes, that women and children were saved first. Is that true?
 
 ```{r}
 ggplot(train, aes(x=Age, fill=PassengerStatus)) + geom_histogram(position = 'stack', alpha=0.5, binwidth = 7) +
